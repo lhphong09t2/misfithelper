@@ -3,9 +3,12 @@ package com.example.luongt.misfithelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.example.luongt.misfithelper.control.DynamicView;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCallBack;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
@@ -15,22 +18,52 @@ import com.misfit.misfitlinksdk.publish.MFLGestureType;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements
+        CompoundButton.OnCheckedChangeListener,
+        View.OnClickListener,
+        OnMisfitButtonClickListener
+{
 
     private static final String TAG = "MainActivity";
+
+    private DynamicView _styleOneView;
+    private DynamicView _styleTwoView;
+    private DynamicView _styleThreeView;
+    private DynamicView _styleFourView;
+
+    private Button _styleOneButton;
+    private Button _styleTwoButton;
+    private Button _styleThreeButton;
+    private Button _styleFourButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((Switch) findViewById(R.id.switch1)).setOnCheckedChangeListener(this);
+
+        _styleOneView = (DynamicView)findViewById(R.id.styleOneView);
+        _styleTwoView = (DynamicView)findViewById(R.id.styleTwoView);
+        _styleThreeView = (DynamicView)findViewById(R.id.styleThreeView);
+        _styleFourView = (DynamicView)findViewById(R.id.styleFourView);
+
+        _styleOneButton = (Button)findViewById(R.id.singlePressButton);
+        _styleTwoButton = (Button)findViewById(R.id.doublePressButton);
+        _styleThreeButton = (Button)findViewById(R.id.triplePressButton);
+        _styleFourButton = (Button)findViewById(R.id.longPressButton);
+
+        _styleOneButton.setOnClickListener(this);
+        _styleTwoButton.setOnClickListener(this);
+        _styleThreeButton.setOnClickListener(this);
+        _styleFourButton.setOnClickListener(this);
+
         DeviceMonitorDelegate deviceMonitorDelegate = new DeviceMonitorDelegate();
         MFLSession.sharedInstance().setGestureCommandDelegate(deviceMonitorDelegate);
+        deviceMonitorDelegate.setOnMisfitButtonClickListener(this);
 
         DeviceStateTrackingDelegate deviceStateTrackingDelegate = new DeviceStateTrackingDelegate();
         MFLSession.sharedInstance().setStateTrackingDelegate(deviceStateTrackingDelegate);
-
-        ((Switch) findViewById(R.id.switch1)).setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -57,5 +90,40 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         } else {
             MFLSession.sharedInstance().disable();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == _styleOneButton)
+        {
+            _styleOneView.blink();
+        }
+    }
+
+    @Override
+    public void onClick(MFLGestureType type) {
+
+        final MFLGestureType temp = type;
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (temp)
+                {
+                    case SINGLE_PRESS:
+                        _styleOneView.blink();
+                        break;
+                    case DOUBLE_PRESS:
+                        _styleTwoView.blink();
+                        break;
+                    case TRIPLE_PRESS:
+                        _styleThreeView.blink();
+                        break;
+                    default:
+                        _styleFourView.blink();
+                        break;
+                }
+            }
+        });
     }
 }
