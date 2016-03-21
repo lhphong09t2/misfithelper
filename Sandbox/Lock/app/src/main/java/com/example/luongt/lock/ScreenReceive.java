@@ -1,5 +1,7 @@
 package com.example.luongt.lock;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +15,10 @@ public class ScreenReceive extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         //if (intent.getAction().equals(Intent.ACTION_SCREEN_ON))
         {
-            Log.i("ABC", "ScreenReceive onReceive");
-            Intent intentLock = new Intent();
-            intentLock.setClass(context, ScreenLockActivity.class);
-            context.startActivity(intentLock);
+            Intent i = new Intent();
+            i.setClass(context, ScreenLockActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
         }
     }
 }
