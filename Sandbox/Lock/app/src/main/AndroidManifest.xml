@@ -3,6 +3,10 @@
     package="com.example.luongt.lock">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -28,9 +32,15 @@
 
         <receiver android:name=".ScreenReceive">
             <intent-filter android:enabled="true" android:exported="false">
-                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.SCREEN_ON"/>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".ServiceLock"
+            android:exported="false"/>
+
     </application>
 
 </manifest>
