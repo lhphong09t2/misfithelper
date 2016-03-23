@@ -30,6 +30,12 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".receiver.ScreenReceive">
+            <intent-filter android:enabled="true" android:exported="false">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.ServiceLock"
             android:exported="false" />
