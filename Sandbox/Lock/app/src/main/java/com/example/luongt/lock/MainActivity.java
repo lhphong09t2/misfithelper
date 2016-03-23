@@ -21,4 +21,5 @@ public class MainActivity extends AppCompatActivity{
         startService(new Intent(getBaseContext(), ServiceLock.class));
         super.onDestroy();
     }
+
 }

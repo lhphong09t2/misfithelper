@@ -30,19 +30,9 @@
             </intent-filter>
         </activity>
 
-        <!--
-        <receiver android:name=".ScreenReceive">
-            <intent-filter android:enabled="true" android:exported="false">
-                <action android:name="android.intent.action.SCREEN_ON"/>
-                <action android:name="android.intent.action.SCREEN_OFF"/>
-            </intent-filter>
-        </receiver>
-        -->
-
         <service
             android:name=".service.ServiceLock"
             android:exported="false" />
-
     </application>
 
 </manifest>
