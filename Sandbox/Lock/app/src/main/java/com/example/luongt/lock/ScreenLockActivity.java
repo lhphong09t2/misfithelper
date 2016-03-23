@@ -15,15 +15,15 @@ import android.widget.FrameLayout;
 public class ScreenLockActivity extends AppCompatActivity implements View.OnClickListener {
 
     WindowManager manager;
-    FrameLayout view;
+    FrameLayout viewStatusBar;
+    FrameLayout viewNavBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setFullScreen();
-        DisableBar(Gravity.TOP);
-        DisableBar(Gravity.BOTTOM);
+        DisableSystemBar();
         showWhenLocked();
 
         setContentView(R.layout.activity_screen_lock);
@@ -33,16 +33,14 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onBackPressed() {
-        return;
-    }
-
-    @Override
     public void onClick(View v) {
-        manager.removeView(view);
+        manager.removeView(viewStatusBar);
+        manager.removeView(viewNavBar);
+
         KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
         lock.disableKeyguard();
+
         this.finish();
     }
 
@@ -59,10 +57,7 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
     }
 
-    public void DisableBar(int position){
-        manager = ((WindowManager) getApplicationContext()
-                .getSystemService(Context.WINDOW_SERVICE));
-
+    public WindowManager.LayoutParams getLayoutParams(int position){
         WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
         localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         localLayoutParams.gravity = position;
@@ -73,8 +68,19 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
         localLayoutParams.height = (int) (50 * getResources()
                 .getDisplayMetrics().scaledDensity);
         localLayoutParams.format = PixelFormat.TRANSPARENT;
+        return localLayoutParams;
+    }
 
-        view = new FrameLayout(this);
-        manager.addView(view, localLayoutParams);
+    public  void DisableSystemBar(){
+        manager = ((WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE));
+
+        WindowManager.LayoutParams layoutTop = getLayoutParams(Gravity.TOP);
+        viewStatusBar = new FrameLayout(this);
+        manager.addView(viewStatusBar, layoutTop);
+
+        WindowManager.LayoutParams layoutBottom = getLayoutParams(Gravity.BOTTOM);
+        viewNavBar = new FrameLayout(this);
+        manager.addView(viewNavBar, layoutBottom);
     }
 }
