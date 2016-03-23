@@ -1,4 +1,4 @@
-package com.example.luongt.lock;
+package com.example.luongt.lock.receiver;
 
 import android.app.Activity;
 import android.app.KeyguardManager;
@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.example.luongt.lock.ScreenLockActivity;
 
 /**
  * Created by luongt on 3/21/2016.

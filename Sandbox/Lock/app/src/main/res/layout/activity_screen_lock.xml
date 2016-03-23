@@ -9,13 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.luongt.lock.ScreenLockActivity">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
+        android:text="Unlock"
+        android:id="@+id/unlockButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="121dp" />
+        android:layout_marginTop="50dp" />
 </RelativeLayout>
