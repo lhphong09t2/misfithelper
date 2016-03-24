@@ -24,6 +24,7 @@ public class CallReceiver extends BroadcastReceiver {
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                 String number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                 Log.e(TAG, "incoming number : " + number);
+                silenceRinger(context);
             }
         }
     }
