@@ -1,22 +1,35 @@
-package com.example.luongt.lock;
+package com.example.luongt.misfit;
 
-import android.app.Activity;
-import android.app.KeyguardManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
-public class ScreenLockActivity extends AppCompatActivity implements View.OnClickListener {
+public class LockActivity extends AppCompatActivity {
 
     WindowManager manager;
     FrameLayout viewStatusBar;
     FrameLayout viewNavBar;
+
+    private LocalBroadcastManager _localBroadcastManager;
+    private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals("android.intent.action.FINISH")){
+                manager.removeView(viewStatusBar);
+                manager.removeView(viewNavBar);
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,22 +39,11 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
         DisableSystemBar();
         showWhenLocked();
 
-        setContentView(R.layout.activity_screen_lock);
+        setContentView(R.layout.activity_lock);
 
-        Button unlockButton = (Button)findViewById(R.id.unlockButton);
-        unlockButton.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        manager.removeView(viewStatusBar);
-        manager.removeView(viewNavBar);
-
-        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
-        lock.disableKeyguard();
-
-        this.finish();
+        _localBroadcastManager = LocalBroadcastManager.getInstance(LockActivity.this);
+        IntentFilter mIntentFilter = new IntentFilter("android.intent.action.FINISH");
+        _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
     }
 
     public void setFullScreen(){
@@ -87,5 +89,11 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onBackPressed() {
         return;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
     }
 }

@@ -7,6 +7,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.service.HelloService;
+import com.example.luongt.misfit.service.LockService;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCallBack;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements
         {
             Intent myIntent = new Intent(MainActivity.this, HelloService.class);
             startService(myIntent);
+            startService(new Intent(getBaseContext(), LockService.class));
         }
     }
 

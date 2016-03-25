@@ -16,11 +16,8 @@ public class CallReceiver extends BroadcastReceiver {
     String TAG = "ABC";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i("ABC", "received");
         if(intent.getAction().equals("android.intent.action.PHONE_STATE")){
-
             String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                 String number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                 Log.e(TAG, "incoming number : " + number);

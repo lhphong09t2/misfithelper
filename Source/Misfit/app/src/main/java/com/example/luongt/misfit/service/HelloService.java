@@ -2,8 +2,10 @@ package com.example.luongt.misfit.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.luongt.misfit.LockActivity;
 import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
 import com.example.luongt.misfit.misfithelper.FuelMoneyStatisticHelper;
 import com.example.luongt.misfit.misfithelper.MisfitHelper;
@@ -70,6 +72,10 @@ public class HelloService extends IntentService implements MFLGestureCommandDele
                     {
                         _currentMisfitHelper =  _misfitHelpers.get(0);
                     }
+
+                    Intent lockIntent = new Intent(this, LockActivity.class);
+                    lockIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(lockIntent);
                     break;
                 case "dp":
                     if (_currentIndex != 0)
@@ -82,7 +88,8 @@ public class HelloService extends IntentService implements MFLGestureCommandDele
                     }
                     break;
                 case "tp":
-                    // TODO: Send lock or unock intent
+                    LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+                    localBroadcastManager.sendBroadcast(new Intent("android.intent.action.FINISH"));
                     break;
                 default:
                     break;
