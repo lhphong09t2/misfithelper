@@ -15,10 +15,10 @@ import android.widget.FrameLayout;
 
 public class LockActivity extends AppCompatActivity {
 
-    WindowManager manager;
     FrameLayout viewStatusBar;
     FrameLayout viewNavBar;
 
+    WindowManager manager;
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -41,7 +41,7 @@ public class LockActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_lock);
 
-        _localBroadcastManager = LocalBroadcastManager.getInstance(LockActivity.this);
+        _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter("android.intent.action.FINISH");
         _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
     }

@@ -6,8 +6,11 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -23,7 +26,7 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
 
         setFullScreen();
-        DisableSystemBar();
+        //DisableSystemBar();
         showWhenLocked();
 
         setContentView(R.layout.activity_screen_lock);
@@ -33,9 +36,30 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
+    public void onAttachedToWindow() {
+        Log.e("Home Button", "onAttachedToWindow");
+        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onAttachedToWindow();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.e("Home Button", "Clicked");
+        if(keyCode == KeyEvent.KEYCODE_HOME)
+        {
+            Log.e("Home Button", "Clicked");
+        }
+        if(keyCode== KeyEvent.KEYCODE_BACK)
+        {
+            finish();
+        }
+        return false;
+    }
+
+    @Override
     public void onClick(View v) {
-        manager.removeView(viewStatusBar);
-        manager.removeView(viewNavBar);
+        //manager.removeView(viewStatusBar);
+        //manager.removeView(viewNavBar);
 
         KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
