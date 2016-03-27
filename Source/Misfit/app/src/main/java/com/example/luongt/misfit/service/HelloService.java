@@ -103,6 +103,7 @@ public class HelloService extends IntentService implements MFLGestureCommandDele
                     _currentMisfitHelper.onDoublePress();
                     break;
                 case "tp":
+                    broadcastManager.sendBroadcast(new Intent("END_CALL"));
                     _currentMisfitHelper.onTripplePress();
                     break;
 

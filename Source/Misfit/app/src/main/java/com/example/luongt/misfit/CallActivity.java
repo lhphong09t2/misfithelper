@@ -9,9 +9,13 @@ import android.media.AudioManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.os.Bundle;
 import android.telephony.gsm.SmsManager;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.example.luongt.misfit.helper.CallSetting;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class CallActivity extends Activity {
 
@@ -27,6 +31,9 @@ public class CallActivity extends Activity {
             if(intent.getAction().equals("SEND_MESSAGE")){
                 sendMessage(CallSetting.phoneNumber, CallSetting.message);
             }
+            if(intent.getAction().equals("END_CALL")){
+                endCall();
+            }
             if(intent.getAction().equals("FINISH")){
                 finish();
             }
@@ -40,6 +47,7 @@ public class CallActivity extends Activity {
         _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter("SILENCE_RINGER");
         mIntentFilter.addAction("SEND_MESSAGE");
+        mIntentFilter.addAction("END_CALL");
         mIntentFilter.addAction("FINISH");
         _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
     }
@@ -53,7 +61,7 @@ public class CallActivity extends Activity {
 
     public void silenceRinger(Context context){
         AudioManager am= (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        am.setStreamMute(AudioManager.STREAM_RING, true);
     }
 
     public void sendMessage(String phoneNumber, String message){
@@ -62,5 +70,18 @@ public class CallActivity extends Activity {
             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
         }
         catch (Exception e){}
+    }
+
+    public void endCall(){
+        Executor eS = Executors.newSingleThreadExecutor();
+        eS.execute(new Runnable() {
+            @Override
+            public void run() {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec("service call phone 5 \n");
+                } catch (Exception exc) {}
+            }
+        });
     }
 }

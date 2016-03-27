@@ -8,6 +8,9 @@ import android.telephony.TelephonyManager;
 import android.telephony.gsm.SmsManager;
 import android.util.Log;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 /**
  * Created by luongt on 3/23/2016.
  */
@@ -21,14 +24,16 @@ public class CallReceiver extends BroadcastReceiver {
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
                 String number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
                 Log.e(TAG, "incoming number : " + number);
-                silenceRinger(context);
+                //silenceRinger(context);
+
+
             }
         }
     }
 
     public void silenceRinger(Context context){
         AudioManager am= (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        am.setStreamMute(AudioManager.STREAM_RING, true);
     }
 
     public void sendMessage(String phoneNumber, String message){
@@ -37,5 +42,21 @@ public class CallReceiver extends BroadcastReceiver {
             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
         }
         catch (Exception e){}
+    }
+
+    public void endCall(){
+        Executor eS = Executors.newSingleThreadExecutor();
+        eS.execute(new Runnable() {
+            @Override
+            public void run() {
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    Log.d(TAG, "service call phone 5 \n");
+                    runtime.exec("service call phone 5 \n");
+                } catch (Exception exc) {
+                    Log.e(TAG, exc.getMessage());
+                }
+            }
+        });
     }
 }
