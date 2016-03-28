@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Misfit</string>
+    <string name="setting_mode">Setting mode</string>
+    <string name="exit_setting_mode">Exit setting mode</string>
+
+    <string name="control_slide">Control slide</string>
+    <string name="next_slide">Next slide</string>
+    <string name="back_slide">Previous slide</string>
+
 </resources>

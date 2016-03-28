@@ -1,12 +1,41 @@
 package com.example.luongt.misfit.misfithelper;
 
+import android.content.Context;
+
+import com.example.luongt.misfit.R;
+
 /**
  * Created by luongt on 3/24/2016.
  */
-public class ControlSlideHelper implements MisfitHelper {
+public class ControlSlideHelper extends BaseMisfitHelper implements MisfitHelper {
+
+    public ControlSlideHelper(Context context) {
+        super(context);
+    }
+
+    @Override
+    String getKey() {
+        return null;
+    }
+
+    @Override
+    Object createDefaultSetting() {
+        return null;
+    }
+
+    @Override
+    String getSettingJson(Object setting) {
+        return null;
+    }
+
+    @Override
+    Object parseJsonSetting(String settingJson) {
+        return null;
+    }
+
     @Override
     public String getName() {
-        return "Control slide";
+        return getContext().getString(R.string.control_slide);
     }
 
     @Override
@@ -16,7 +45,7 @@ public class ControlSlideHelper implements MisfitHelper {
 
     @Override
     public String getSinglePressTitle() {
-        return "Go to next slide";
+        return getContext().getString(R.string.next_slide);
     }
 
     @Override
@@ -26,7 +55,7 @@ public class ControlSlideHelper implements MisfitHelper {
 
     @Override
     public String getDoublePressTitle() {
-        return  "Back to previous slide";
+        return getContext().getString(R.string.back_slide);
     }
 
     @Override

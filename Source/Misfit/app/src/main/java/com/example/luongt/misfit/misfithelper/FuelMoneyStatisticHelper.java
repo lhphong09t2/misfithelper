@@ -1,9 +1,36 @@
 package com.example.luongt.misfit.misfithelper;
 
+import android.content.Context;
+
 /**
  * Created by luongt on 3/24/2016.
  */
-public class FuelMoneyStatisticHelper implements MisfitHelper {
+public class FuelMoneyStatisticHelper extends BaseMisfitHelper implements MisfitHelper {
+
+    public FuelMoneyStatisticHelper(Context context) {
+        super(context);
+    }
+
+    @Override
+    Object createDefaultSetting() {
+        return null;
+    }
+
+    @Override
+    String getKey() {
+        return null;
+    }
+
+    @Override
+    String getSettingJson(Object setting) {
+        return null;
+    }
+
+    @Override
+    Object parseJsonSetting(String settingJson) {
+        return null;
+    }
+
     @Override
     public String getName() {
         return null;

@@ -29,11 +29,10 @@ public class MainActivity extends AppCompatActivity implements
         misfitSwitch.setOnCheckedChangeListener(this);
         misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
 
-        if (!HelloService.isServiceRunning)
+        if (!HelloService.IsServiceRunning())
         {
-            Intent myIntent = new Intent(MainActivity.this, HelloService.class);
-            startService(myIntent);
-            startService(new Intent(getBaseContext(), LockService.class));
+            startService(new Intent(this, HelloService.class));
+            startService(new Intent(this, LockService.class));
         }
     }
 

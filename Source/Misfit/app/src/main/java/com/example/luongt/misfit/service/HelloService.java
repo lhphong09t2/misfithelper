@@ -1,17 +1,18 @@
 package com.example.luongt.misfit.service;
 
-import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.example.luongt.misfit.LockActivity;
+import com.example.luongt.misfit.MFContants;
+import com.example.luongt.misfit.MisfitEventNotifierApplication;
+import com.example.luongt.misfit.R;
+import com.example.luongt.misfit.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.misfithelper.CallHelper;
 import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
 import com.example.luongt.misfit.misfithelper.FuelMoneyStatisticHelper;
 import com.example.luongt.misfit.misfithelper.MisfitHelper;
-import com.example.luongt.misfit.receiver.CallReceiver;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
 import com.misfit.misfitlinksdk.publish.MFLDeviceState;
@@ -24,30 +25,37 @@ import java.util.ArrayList;
 /**
  * Created by luongt on 3/24/2016.
  */
-public class HelloService extends IntentService implements MFLGestureCommandDelegate, MFLStateTrackingDelegate {
+public class HelloService extends TTSService implements MFLGestureCommandDelegate, MFLStateTrackingDelegate {
 
     private static final String TAG = "HelloService";
-    public static Boolean isServiceRunning = false;
+
+    private static Boolean _isServiceRunning = false;
 
     private ArrayList<MisfitHelper> _misfitHelpers;
     private MisfitHelper _currentMisfitHelper;
+    private CallHelper _callHelper;
+    private AlarmHelper _alarmHelper;
+
+    private String _commandMisfit;
 
     public HelloService() {
         super(TAG);
     }
 
+    public static boolean IsServiceRunning()
+    {
+        return _isServiceRunning;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        isServiceRunning = true;
+        _isServiceRunning = true;
 
         MFLSession.sharedInstance().setGestureCommandDelegate(this);
         MFLSession.sharedInstance().setStateTrackingDelegate(this);
 
-        _misfitHelpers = new ArrayList<MisfitHelper>();
-        _misfitHelpers.add(new ControlSlideHelper());
-        _misfitHelpers.add(new FuelMoneyStatisticHelper());
-        _currentMisfitHelper = _misfitHelpers.get(0);
+        InitHelpers();
     }
 
     @Override
@@ -58,69 +66,125 @@ public class HelloService extends IntentService implements MFLGestureCommandDele
 
     @Override
     public void performActionByCommand(MFLCommand command, String serialNumber) {
-        String commandMisfit = command.getName();
-
+        _commandMisfit = command.getName();
         int _currentIndex = _misfitHelpers.indexOf(_currentMisfitHelper);
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
 
         if (_isSettingMode) {
-            switch (commandMisfit) {
+            switch (_commandMisfit) {
                 case "sp":
-                    if (_currentIndex != _misfitHelpers.size() -1)
-                    {
+                    if (_currentIndex != _misfitHelpers.size() - 1) {
                         _currentMisfitHelper = _misfitHelpers.get(_currentIndex + 1);
+                    } else {
+                        _currentMisfitHelper = _misfitHelpers.get(0);
                     }
-                    else
-                    {
-                        _currentMisfitHelper =  _misfitHelpers.get(0);
-                    }
+                    speak(_currentMisfitHelper.getName());
                     break;
                 case "dp":
-                    if (_currentIndex != 0)
-                    {
+                    if (_currentIndex != 0) {
                         _currentMisfitHelper = _misfitHelpers.get(_currentIndex - 1);
-                    }
-                    else
-                    {
+                    } else {
                         _currentMisfitHelper = _misfitHelpers.get(_misfitHelpers.size() - 1);
                     }
+                    speak(_currentMisfitHelper.getName());
                     break;
                 case "tp":
-                    broadcastManager.sendBroadcast(new Intent("android.intent.action.FINISH"));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("android.intent.action.FINISH"));
                     break;
                 default:
                     _isSettingMode = false;
+                    speak(getString(R.string.exit_setting_mode));
                     break;
             }
-        } else {
-            switch (commandMisfit) {
-                case "sp":
-                    broadcastManager.sendBroadcast(new Intent("SILENCE_RINGER"));
-                    _currentMisfitHelper.getSinglePressTitle();
-                    break;
-                case "dp":
-                    broadcastManager.sendBroadcast(new Intent("SEND_MESSAGE"));
-                    _currentMisfitHelper.onDoublePress();
-                    break;
-                case "tp":
-                    broadcastManager.sendBroadcast(new Intent("END_CALL"));
-                    _currentMisfitHelper.onTripplePress();
-                    break;
-
-                default:
-                    _isSettingMode = true;
-                    break;
-            }
+        }
+        else if (CallHelper.isInComingCall) {
+            Log.e(TAG, "IsInComingCall");
+            HandleIncomingCall();
+        }
+        else if (AlarmHelper.isAlarming)
+        {
+            Log.e(TAG, "IsAlarming");
+            HandleAlarm();
+        }
+        else {
+            Log.e(TAG, "HandleCurrentHelper");
+            HandleCurrentHelper();
         }
     }
 
     @Override
     public void onDeviceStateChange(MFLDeviceState mflDeviceState, String s) {
-
+        //TODO: handle device state change
     }
 
     @Override
     public void onServiceStateChange(MFLServiceState mflServiceState) {
+        //TODO: handle service state change
+    }
 
+    private void HandleIncomingCall() {
+        switch (_commandMisfit) {
+            case "sp":
+                _callHelper.onSinglePress();
+                break;
+            case "dp":
+                _callHelper.onDoublePress();
+                break;
+            case "tp":
+                _callHelper.onTripplePress();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleAlarm() {
+        switch (_commandMisfit) {
+            case "sp":
+                _alarmHelper.onSinglePress();
+                break;
+            case "dp":
+                _alarmHelper.onDoublePress();
+                break;
+            case "tp":
+                _alarmHelper.onTripplePress();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleCurrentHelper() {
+        switch (_commandMisfit) {
+            case "sp":
+                _currentMisfitHelper.onSinglePress();
+                speak(_currentMisfitHelper.getSinglePressTitle());
+                break;
+            case "dp":
+                _currentMisfitHelper.onDoublePress();
+                speak(_currentMisfitHelper.getDoublePressTitle());
+                break;
+            case "tp":
+                _currentMisfitHelper.onTripplePress();
+                speak(_currentMisfitHelper.getTriplePressTitle());
+                break;
+            default:
+                _isSettingMode = true;
+                speak(getString(R.string.setting_mode));
+                break;
+        }
+    }
+
+    private void InitHelpers()
+    {
+        Context context = MisfitEventNotifierApplication.getContext();
+        getSharedPreferences(MFContants.CALL_SETTING_KEY, MODE_PRIVATE);
+
+        _misfitHelpers = new ArrayList<MisfitHelper>();
+        _misfitHelpers.add(new ControlSlideHelper(context));
+        _misfitHelpers.add(new FuelMoneyStatisticHelper(context));
+        _currentMisfitHelper = _misfitHelpers.get(0);
+
+        _callHelper = new CallHelper(context);
+        _alarmHelper = new AlarmHelper(context);
     }
 }
