@@ -19,7 +19,6 @@ public class LockActivity extends AppCompatActivity {
     FrameLayout viewNavBar;
 
     WindowManager manager;
-    private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,9 +40,8 @@ public class LockActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_lock);
 
-        _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter("FINISH_LOCK");
-        _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
+        registerReceiver(_broadcastReceiver, mIntentFilter);
     }
 
     public void setFullScreen(){
@@ -94,6 +92,6 @@ public class LockActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
+        unregisterReceiver(_broadcastReceiver);
     }
 }

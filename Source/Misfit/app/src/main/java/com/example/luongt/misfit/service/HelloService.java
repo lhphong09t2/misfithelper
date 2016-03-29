@@ -32,7 +32,6 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
 
     private static final String TAG = "HelloService";
 
-    private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -75,9 +74,8 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         startService(new Intent(this, LockService.class));
         InitHelpers();
 
-        _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter("ACTION_SAVE_SETTING");
-        _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
+        registerReceiver(_broadcastReceiver, mIntentFilter);
     }
 
 
@@ -147,7 +145,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     @Override
     public void onDestroy() {
         super.onDestroy();
-        _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
+        unregisterReceiver(_broadcastReceiver);
     }
 
     private void HandleIncomingCall() {

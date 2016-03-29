@@ -89,7 +89,7 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra("HOUR_OF_DATE", hourOfDay);
             intent.putExtra("MINUTE", minute);
             intent.putExtra("IS_REPEAT", repeatCheckbox.isChecked());
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            sendBroadcast(intent);
 
             Toast.makeText(this, "Set alarm at "+hourOfDay+":"+String.format("%02d", minute), Toast.LENGTH_LONG).show();
             setAlarm(hourOfDay, minute, repeatCheckbox.isChecked());
