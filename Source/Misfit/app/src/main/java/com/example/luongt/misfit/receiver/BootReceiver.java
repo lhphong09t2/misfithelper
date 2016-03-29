@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.luongt.misfit.service.HelloService;
-import com.example.luongt.misfit.service.LockService;
 
 
 /**
@@ -14,7 +13,8 @@ import com.example.luongt.misfit.service.LockService;
 public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (HelloService.getInstance() == null) {
             context.startService(new Intent(context, HelloService.class));
-            context.startService(new Intent(context, LockService.class));
         }
     }
+}

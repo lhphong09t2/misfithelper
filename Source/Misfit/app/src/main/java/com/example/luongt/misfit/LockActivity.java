@@ -23,7 +23,7 @@ public class LockActivity extends AppCompatActivity {
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("android.intent.action.FINISH")){
+            if(intent.getAction().equals("FINISH_LOCK")){
                 manager.removeView(viewStatusBar);
                 manager.removeView(viewNavBar);
                 finish();
@@ -42,7 +42,7 @@ public class LockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lock);
 
         _localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter mIntentFilter = new IntentFilter("android.intent.action.FINISH");
+        IntentFilter mIntentFilter = new IntentFilter("FINISH_LOCK");
         _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
     }
 

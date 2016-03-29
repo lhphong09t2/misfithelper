@@ -1,40 +1,40 @@
 package com.example.luongt.misfit.model;
 
-import java.util.Date;
-
 /**
  * Created by luongt on 3/28/2016.
  */
 public class AlarmSetting {
-    public Date getAlarmTime() {
-        return alarmTime;
+    public AlarmSetting(int hour, int minute, boolean isRepeat){
+        this.hour = hour;
+        this.minute = minute;
+        this.isRepeat = isRepeat;
     }
 
-    public void setAlarmTime(Date alarmTime) {
-        this.alarmTime = alarmTime;
+    private int hour;
+    private int minute;
+    private boolean isRepeat;
+
+    public int getHour() {
+        return hour;
     }
 
-    private Date alarmTime;
-
-    public boolean[] getAllowedDay() {
-        return allowedDay;
+    public int getMinute() {
+        return minute;
     }
 
-    public void setAllowedDay(boolean[] allowedDay) {
-        this.allowedDay = allowedDay;
+    public boolean getIsRepeat() {
+        return isRepeat;
     }
 
-    private boolean[] allowedDay;
-
-    public boolean isEnableInteration() {
-        return enableInteration;
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 
-    public void setEnableInteration(boolean enableInteration) {
-        this.enableInteration = enableInteration;
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
-    private boolean enableInteration;
-
-
+    public void setIsRepeat(boolean isRepeat) {
+        this.isRepeat = isRepeat;
+    }
 }

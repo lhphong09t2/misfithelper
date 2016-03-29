@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.example.luongt.misfit.model.AlarmSetting;
 
-import java.util.Date;
-
 /**
  * Created by luongt on 3/28/2016.
  */
@@ -24,11 +22,11 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> implements Misfi
 
     @Override
     AlarmSetting createDefaultSetting() {
-        AlarmSetting setting = new AlarmSetting();
-        setting.setAlarmTime(new Date());
-        setting.setAllowedDay(new boolean[7]);
-        setting.setEnableInteration(true);
-        return setting;
+//        AlarmSetting setting = new AlarmSetting();
+//        setting.setAlarmTime(new Date());
+//        setting.setAllowedDay(new boolean[7]);
+//        setting.setEnableInteration(true);
+        return null;
     }
 
     @Override

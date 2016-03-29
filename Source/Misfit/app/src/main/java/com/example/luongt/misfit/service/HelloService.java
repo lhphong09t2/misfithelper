@@ -1,7 +1,9 @@
 package com.example.luongt.misfit.service;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -13,6 +15,7 @@ import com.example.luongt.misfit.misfithelper.CallHelper;
 import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
 import com.example.luongt.misfit.misfithelper.FuelMoneyStatisticHelper;
 import com.example.luongt.misfit.misfithelper.MisfitHelper;
+import com.example.luongt.misfit.model.AlarmSetting;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
 import com.misfit.misfitlinksdk.publish.MFLDeviceState;
@@ -29,34 +32,54 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
 
     private static final String TAG = "HelloService";
 
-    private static Boolean _isServiceRunning = false;
+    private LocalBroadcastManager _localBroadcastManager;
+    private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "Service received");
+            AlarmSetting alarmsetting = new AlarmSetting(intent.getIntExtra("HOUR_OF_DATE", 0), intent.getIntExtra("MINUTE", 0), intent.getBooleanExtra("IS_REPEAT", false));
+            _alarmHelper.SaveSetting(alarmsetting);
+        }
+    };
 
     private ArrayList<MisfitHelper> _misfitHelpers;
+    public ArrayList<MisfitHelper> getMisfitHelpers() {
+        return _misfitHelpers;
+    }
+
     private MisfitHelper _currentMisfitHelper;
     private CallHelper _callHelper;
     private AlarmHelper _alarmHelper;
 
     private String _commandMisfit;
 
-    public HelloService() {
-        super(TAG);
+    private  static  HelloService _instance;
+    public static HelloService getInstance()
+    {
+        return  _instance;
     }
 
-    public static boolean IsServiceRunning()
+    public HelloService()
     {
-        return _isServiceRunning;
+        super(TAG);
+        _instance = this;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        _isServiceRunning = true;
 
         MFLSession.sharedInstance().setGestureCommandDelegate(this);
         MFLSession.sharedInstance().setStateTrackingDelegate(this);
 
+        startService(new Intent(this, LockService.class));
         InitHelpers();
+
+        _localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter mIntentFilter = new IntentFilter("ACTION_SAVE_SETTING");
+        _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
     }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -88,7 +111,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     speak(_currentMisfitHelper.getName());
                     break;
                 case "tp":
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("android.intent.action.FINISH"));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent("FINISH_LOCK"));
                     break;
                 default:
                     _isSettingMode = false;
@@ -119,6 +142,12 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     @Override
     public void onServiceStateChange(MFLServiceState mflServiceState) {
         //TODO: handle service state change
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
     }
 
     private void HandleIncomingCall() {
