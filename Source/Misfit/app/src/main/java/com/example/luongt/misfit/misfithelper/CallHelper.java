@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by luongt on 3/28/2016.
  */
-public class CallHelper extends BaseMisfitHelper implements MisfitHelper {
+public class CallHelper extends BaseMisfitHelper {
 
     public static boolean isInComingCall = false;
     public static String phoneNumber;

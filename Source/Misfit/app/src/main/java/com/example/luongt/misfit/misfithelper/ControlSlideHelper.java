@@ -7,7 +7,7 @@ import com.example.luongt.misfit.R;
 /**
  * Created by luongt on 3/24/2016.
  */
-public class ControlSlideHelper extends BaseMisfitHelper implements MisfitHelper {
+public class ControlSlideHelper extends BaseMisfitHelper {
 
     public ControlSlideHelper(Context context) {
         super(context);

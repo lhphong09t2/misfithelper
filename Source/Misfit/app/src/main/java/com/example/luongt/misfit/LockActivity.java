@@ -1,5 +1,7 @@
 package com.example.luongt.misfit;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,10 +21,11 @@ public class LockActivity extends AppCompatActivity {
     FrameLayout viewNavBar;
 
     WindowManager manager;
+    private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals("FINISH_LOCK")){
+            if(intent.getAction().equals(MFContants.FINISH_LOCK)){
                 manager.removeView(viewStatusBar);
                 manager.removeView(viewNavBar);
                 finish();
@@ -40,8 +43,10 @@ public class LockActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_lock);
 
-        IntentFilter mIntentFilter = new IntentFilter("FINISH_LOCK");
-        registerReceiver(_broadcastReceiver, mIntentFilter);
+         _localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter mIntentFilter = new IntentFilter(MFContants.FINISH_LOCK);
+        _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
+
     }
 
     public void setFullScreen(){
@@ -49,8 +54,7 @@ public class LockActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     public void showWhenLocked(){
@@ -92,6 +96,11 @@ public class LockActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(_broadcastReceiver);
+        _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
+
+        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
+        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
+        lock.disableKeyguard();
+
     }
 }

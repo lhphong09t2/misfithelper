@@ -13,9 +13,8 @@ public abstract class BaseMisfitHelper<T> {
     private Context _context;
     private T _setting;
 
-    protected Context getContext()
-    {
-        return  _context;
+    protected Context getContext() {
+        return _context;
     }
 
     public BaseMisfitHelper(Context context) {
@@ -24,14 +23,15 @@ public abstract class BaseMisfitHelper<T> {
     }
 
     abstract String getKey();
+
     abstract T createDefaultSetting();
+
     abstract String getSettingJson(T setting);
+
     abstract T parseJsonSetting(String settingJson);
 
-    public void SaveSetting(T setting)
-    {
-        if (setting != null)
-        {
+    public void saveSetting(T setting) {
+        if (setting != null) {
             _setting = setting;
 
             SharedPreferences sharedPref = _context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
@@ -41,25 +41,41 @@ public abstract class BaseMisfitHelper<T> {
         }
     }
 
-    public T GetSetting()
-    {
-        if (_setting != null)
-        {
+    public T getSetting() {
+        if (_setting != null) {
             return _setting;
         }
 
         SharedPreferences sharedPref = _context.getSharedPreferences(TAG, Context.MODE_PRIVATE);
         String settingJson = sharedPref.getString(getKey(), null);
 
-        if (settingJson.equals("") || settingJson == null)
-        {
+        if (settingJson == null || settingJson.equals("")) {
             _setting = createDefaultSetting();
-        }
-        else
-        {
+        } else {
             _setting = parseJsonSetting(settingJson);
         }
 
         return _setting;
     }
+
+
+    public String getSinglePressTitle() {
+        return "Single press";
+    }
+
+    public String getDoublePressTitle() {
+        return "Double press";
+    }
+
+    public String getTriplePressTitle() {
+        return "Triple press";
+    }
+
+    public abstract String getName();
+
+    public abstract void onSinglePress();
+
+    public abstract void onDoublePress();
+
+    public abstract void onTripplePress();
 }

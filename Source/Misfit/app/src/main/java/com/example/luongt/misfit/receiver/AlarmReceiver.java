@@ -3,7 +3,8 @@ package com.example.luongt.misfit.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.PowerManager;
+
+import com.example.luongt.misfit.AlarmReachedActivity;
 
 /**
  * Created by luongt on 3/29/2016.
@@ -11,8 +12,6 @@ import android.os.PowerManager;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        PowerManager.WakeLock screenLock = ((PowerManager)context.getSystemService(context.POWER_SERVICE)).newWakeLock(
-                PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-        screenLock.acquire();
+        context.startActivity(new Intent(context, AlarmReachedActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 }

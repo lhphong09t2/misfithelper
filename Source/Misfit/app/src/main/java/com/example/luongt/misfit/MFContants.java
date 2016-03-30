@@ -5,4 +5,7 @@ package com.example.luongt.misfit;
  */
 public class MFContants {
     public static final String CALL_SETTING_KEY = "CALL_SETTING_KEY";
+    public static final String FINISH_LOCK = "FINISH_LOCK";
+    public static final String SNOOZE = "SNOOZE";
+    public static final String DISMISS = "DISMISS";
 }

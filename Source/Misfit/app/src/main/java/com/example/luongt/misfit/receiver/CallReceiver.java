@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
 
+import com.example.luongt.misfit.LockActivity;
 import com.example.luongt.misfit.misfithelper.CallHelper;
 
 /**
@@ -21,6 +22,10 @@ public class CallReceiver extends BroadcastReceiver {
             }
             if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK) || state.equals(TelephonyManager.EXTRA_STATE_IDLE)){
                 CallHelper.isInComingCall = false;
+                if(LockReceiver.isScreenOn) {
+                    context.startActivity(new Intent(context, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    LockReceiver.isScreenOn = false;
+                }
             }
         }
     }

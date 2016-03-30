@@ -5,7 +5,7 @@ import android.content.Context;
 /**
  * Created by luongt on 3/24/2016.
  */
-public class FuelMoneyStatisticHelper extends BaseMisfitHelper implements MisfitHelper {
+public class FuelMoneyStatisticHelper extends BaseMisfitHelper {
 
     public FuelMoneyStatisticHelper(Context context) {
         super(context);
