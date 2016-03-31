@@ -5,34 +5,37 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context="com.example.luongt.misfit.LockActivity">
-    <TextView
-        android:id="@+id/timeTextView"
-        android:text="4:30"
-        android:textSize="80dp"
-        android:textColor="#ffffff"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/dateTextView"
-        android:text="THURS, MARCH 31"
-        android:textSize="15dp"
-        android:textColor="#ffffff"
-        android:layout_centerHorizontal="true"
+    <TextClock
+        android:id="@+id/timeTC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timeTextView"/>
+        android:layout_marginTop="20dp"
+        android:textColor="#ffffff"
+        android:textSize="80dp"
+        android:format12Hour="k:mm"
+        android:format24Hour="k:mm"
+        android:layout_centerHorizontal="true" />
+    <TextClock
+        android:id="@+id/dateTC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:format12Hour="MMM dd, yyyy"
+        android:format24Hour="MMM dd, yyyy"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/timeTC"/>
 
     <TextView
         android:id="@+id/textView"
         android:text="Use misfit to unlock your phone"
         android:textSize="15dp"
+        android:layout_marginTop="10dp"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/dateTextView"/>
+        android:layout_below="@+id/dateTC"/>
 
     <Button
         android:id="@+id/passCodeButton"

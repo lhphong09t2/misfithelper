@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -19,6 +20,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.luongt.misfit.control.PassCode;
+
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -63,8 +68,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         passcode = (PassCode)findViewById(R.id.passCode);
         passcode.setVisibility(View.GONE);
 
+        final Calendar calendar = Calendar.getInstance();
         textView = (TextView)findViewById(R.id.textView);
-        passcodeEditText = (EditText)findViewById(R.id.passcodeEditText);
+
+        passcodeEditText = (EditText) findViewById(R.id.passcodeEditText);
     }
 
     public void setFullScreen(){
@@ -91,7 +98,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         return localLayoutParams;
     }
 
-    public  void DisableSystemBar(){
+    public void DisableSystemBar(){
         manager = ((WindowManager) getApplicationContext()
                 .getSystemService(Context.WINDOW_SERVICE));
 
@@ -125,10 +132,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         manager.removeView(viewStatusBar);
         manager.removeView(viewNavBar);
-
-        KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
-        KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
-        lock.disableKeyguard();
     }
 
     public void on1Click(View v) {
@@ -182,7 +185,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if(passcodeEditText.getText().toString().equals("1235")){
             this.finish();
         }
-
         //TODO: The pin you enter is not correct
     }
 }
