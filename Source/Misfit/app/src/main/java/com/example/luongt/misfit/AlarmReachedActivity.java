@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -28,6 +29,7 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
     private MediaPlayer _mediaPlayer;
 
     int timeSnooze = 5;
+    int playTime = 1000*60;
 
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
@@ -43,6 +45,12 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
     };
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_reached);
@@ -54,6 +62,8 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         dismissButton = (Button)findViewById(R.id.dismissButton);
         dismissButton.setOnClickListener(this);
 
+        snoozeButton.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BRIGHTNESS_DOWN));
+
         _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter(MFContants.DISMISS);
         mIntentFilter.addAction(MFContants.SNOOZE);
@@ -64,6 +74,14 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         _mediaPlayer = MediaPlayer.create(this, R.raw.cuckoo);
         _mediaPlayer.setLooping(true);
         _mediaPlayer.start();
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Snooze();
+//            }
+//        }, playTime);
+
     }
 
     @Override

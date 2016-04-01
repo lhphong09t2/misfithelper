@@ -15,6 +15,7 @@
         android:format12Hour="k:mm"
         android:format24Hour="k:mm"
         android:layout_centerHorizontal="true" />
+
     <TextClock
         android:id="@+id/dateTC"
         android:layout_width="wrap_content"
