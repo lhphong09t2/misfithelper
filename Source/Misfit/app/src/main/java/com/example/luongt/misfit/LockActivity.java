@@ -177,6 +177,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         if(passcodeEditText.getText().toString().equals("1235")){
             this.finish();
         }
-        //TODO: The pin you enter is not correct
+        //TODO: PIN is not correct
     }
 }

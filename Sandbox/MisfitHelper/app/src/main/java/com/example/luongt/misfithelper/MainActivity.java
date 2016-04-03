@@ -1,9 +1,16 @@
 package com.example.luongt.misfithelper;
 
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -100,10 +107,14 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    Instrumentation m_Instrumentation;
     @Override
     public void onClick(MFLGestureType type) {
 
         final MFLGestureType temp = type;
+
+        m_Instrumentation = new Instrumentation();
+        m_Instrumentation.sendKeyDownUpSync( KeyEvent.KEYCODE_B );
 
         runOnUiThread(new Runnable() {
             @Override
@@ -112,6 +123,30 @@ public class MainActivity extends AppCompatActivity implements
                 {
                     case SINGLE_PRESS:
                         _styleOneView.blink();
+//                        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+//                        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+//                        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+//                        sendBroadcast(upIntent);
+
+//                        m_Instrumentation.sendPointerSync(MotionEvent.obtain(SystemClock.uptimeMillis(),
+//                                SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 100, 0));
+//
+//                        m_Instrumentation.sendPointerSync(MotionEvent.obtain(SystemClock.uptimeMillis(),
+//                                SystemClock.uptimeMillis(),MotionEvent.ACTION_UP,0, 100, 0));
+
+//                        InputConnection ic = getCurrentInputConnection();
+//                        long eventTime = SystemClock.uptimeMillis();
+//                        ic.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+//                                KeyEvent.ACTION_DOWN, keyEventCode, 0, 0, 0, 0,
+//                                KeyEvent.FLAG_SOFT_KEYBOARD|KeyEvent.FLAG_KEEP_TOUCH_MODE));
+//
+//                        ic.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+//                                KeyEvent.ACTION_UP, keyEventCode, 0, 0, 0, 0,
+//                                KeyEvent.FLAG_SOFT_KEYBOARD|KeyEvent.FLAG_KEEP_TOUCH_MODE));
+
+                        new InputMethodService().sendDownUpKeyEvents(KeyEvent.KEYCODE_CAMERA);
+
+
                         break;
                     case DOUBLE_PRESS:
                         _styleTwoView.blink();
