@@ -29,7 +29,6 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
     private MediaPlayer _mediaPlayer;
 
     int timeSnooze = 5;
-    int playTime = 1000*60;
 
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
@@ -74,14 +73,6 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         _mediaPlayer = MediaPlayer.create(this, R.raw.cuckoo);
         _mediaPlayer.setLooping(true);
         _mediaPlayer.start();
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Snooze();
-//            }
-//        }, playTime);
-
     }
 
     @Override

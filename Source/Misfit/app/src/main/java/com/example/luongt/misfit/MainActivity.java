@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.service.HelloService;
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity implements
         misfitSwitch.setOnCheckedChangeListener(this);
         misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
 
-        Button alarmButton = (Button)findViewById(R.id.alarmButton);
-        alarmButton.setOnClickListener(this);
+        RelativeLayout alarmArea = (RelativeLayout)findViewById(R.id.alarmArea);
+        alarmArea.setOnClickListener(this);
 
         if (HelloService.getInstance() == null)
         {

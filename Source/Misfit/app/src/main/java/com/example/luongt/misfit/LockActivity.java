@@ -82,10 +82,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         localLayoutParams.gravity = position;
         localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-
         localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        localLayoutParams.height = (int) (40 * getResources()
-                .getDisplayMetrics().scaledDensity);
+        localLayoutParams.height = (int) (40 * getResources().getDisplayMetrics().scaledDensity);
         localLayoutParams.format = PixelFormat.TRANSPARENT;
         return localLayoutParams;
     }

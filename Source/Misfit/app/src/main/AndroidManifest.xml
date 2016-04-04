@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.luongt.misfit">
 
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -20,6 +20,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,14 +31,15 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="FINISH_LOCK" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".AlarmActivity" />
-        <activity android:name=".AlarmReachedActivity"
+        <activity
+            android:name=".AlarmReachedActivity"
             android:excludeFromRecents="true"
-            android:launchMode="singleInstance">
-        </activity>
+            android:launchMode="singleInstance" />
 
         <receiver
             android:name=".receiver.BootReceiver"
@@ -45,6 +47,7 @@
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -57,6 +60,7 @@
 
         <service android:name=".service.HelloService" />
         <service android:name=".service.LockService" />
+
     </application>
 
 </manifest>

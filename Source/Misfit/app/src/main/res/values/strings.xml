@@ -6,5 +6,12 @@
     <string name="control_slide">Control slide</string>
     <string name="next_slide">Next slide</string>
     <string name="back_slide">Previous slide</string>
+    <string name="title_activity_money">MoneyActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>

@@ -71,10 +71,8 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         InitHelpers();
     }
 
-
     @Override
     protected void onHandleIntent(Intent intent) {
-
     }
 
     private boolean _isSettingMode = false;
