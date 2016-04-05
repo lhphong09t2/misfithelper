@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.service.HelloService;
@@ -27,12 +26,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Switch misfitSwitch = ((Switch) findViewById(R.id.switch1));
+        Switch misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
         misfitSwitch.setOnCheckedChangeListener(this);
         misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
-
-        RelativeLayout alarmArea = (RelativeLayout)findViewById(R.id.alarmArea);
-        alarmArea.setOnClickListener(this);
 
         if (HelloService.getInstance() == null)
         {

@@ -42,7 +42,7 @@
         android:id="@+id/passCodeButton"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:background="@drawable/lock"
+        android:background="@drawable/lock_lock"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="148dp" />
