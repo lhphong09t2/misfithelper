@@ -1,9 +1,9 @@
-package com.example.luongt.misfit.model;
+package com.example.luongt.misfit.model.setting;
 
 /**
  * Created by luongt on 3/28/2016.
  */
-public class AlarmSetting {
+public class AlarmSetting extends BaseSetting {
     public AlarmSetting(int hour, int minute, boolean isRepeat) {
         this.hour = hour;
         this.minute = minute;

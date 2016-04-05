@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="switchButton"/>
+    <item type="id" name="lock" />
+    <item type="id" name="call" />
+    <item type="id" name="slide" />
+    <item type="id" name="alarm" />
+    <item type="id" name="money" />
+</resources>

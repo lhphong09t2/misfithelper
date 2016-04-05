@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.misfithelper;
+package com.example.luongt.misfit.model.misfithelper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.luongt.misfit.MFContants;
-import com.example.luongt.misfit.model.AlarmSetting;
+import com.example.luongt.misfit.R;
+import com.example.luongt.misfit.model.setting.AlarmSetting;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ import java.util.Calendar;
 /**
  * Created by luongt on 3/28/2016.
  */
-public class AlarmHelper extends BaseMisfitHelper<AlarmSetting>  {
+public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
 
     private static final String TAG = "AlarmHelper";
 
@@ -27,8 +28,13 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting>  {
     }
 
     @Override
-    String getKey() {
-        return "AlarmHelper";
+    public String getKey() {
+        return "alarm";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.alarm;
     }
 
     @Override
@@ -60,12 +66,12 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting>  {
             int minute = jsonObj.getInt("minute");
             boolean inRepeat = jsonObj.getBoolean("isRepeat");
 
-            return  new AlarmSetting(hour, minute, inRepeat);
+            return new AlarmSetting(hour, minute, inRepeat);
         } catch (JSONException e) {
             Log.e(TAG, "Cannot parse Json to object");
         }
 
-        return  null;
+        return null;
     }
 
     @Override

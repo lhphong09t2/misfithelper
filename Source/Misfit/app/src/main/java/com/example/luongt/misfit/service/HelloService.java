@@ -8,11 +8,12 @@ import android.util.Log;
 import com.example.luongt.misfit.MFContants;
 import com.example.luongt.misfit.MisfitEventNotifierApplication;
 import com.example.luongt.misfit.R;
-import com.example.luongt.misfit.misfithelper.AlarmHelper;
-import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
-import com.example.luongt.misfit.misfithelper.CallHelper;
-import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
-import com.example.luongt.misfit.misfithelper.FuelMoneyStatisticHelper;
+import com.example.luongt.misfit.model.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.model.misfithelper.BaseMisfitHelper;
+import com.example.luongt.misfit.model.misfithelper.CallHelper;
+import com.example.luongt.misfit.model.misfithelper.ControlSlideHelper;
+import com.example.luongt.misfit.model.misfithelper.LockHelper;
+import com.example.luongt.misfit.model.misfithelper.MoneyStatisticHelper;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
 import com.misfit.misfitlinksdk.publish.MFLDeviceState;
@@ -192,12 +193,16 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         Context context = MisfitEventNotifierApplication.getContext();
         getSharedPreferences(MFContants.CALL_SETTING_KEY, MODE_PRIVATE);
 
-        _misfitHelpers = new ArrayList<BaseMisfitHelper>();
-        _misfitHelpers.add(new ControlSlideHelper(context));
-        _misfitHelpers.add(new FuelMoneyStatisticHelper(context));
-        _currentMisfitHelper = _misfitHelpers.get(0);
-
         _callHelper = new CallHelper(context);
         _alarmHelper = new AlarmHelper(context);
+
+        _misfitHelpers = new ArrayList<BaseMisfitHelper>();
+        _misfitHelpers.add(new ControlSlideHelper(context));
+        _misfitHelpers.add(new MoneyStatisticHelper(context));
+        _misfitHelpers.add(new LockHelper(context));
+        _misfitHelpers.add(_alarmHelper);
+        _misfitHelpers.add(_callHelper);
+
+        _currentMisfitHelper = _misfitHelpers.get(0);
     }
 }

@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.luongt.misfit.MainActivity">
+    tools:context="com.example.luongt.misfit.MainActivity"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:background="@drawable/main_background">
 
-    <Switch
-        android:id="@+id/enableMisfit"
-        style="@style/MainImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.1"/>
+    <!--<Switch-->
+        <!--android:id="@+id/enableMisfit"-->
+        <!--style="@style/MainImageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="0.1"/>-->
 
 
 
-</RelativeLayout>
+</LinearLayout>

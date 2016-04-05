@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.luongt.misfit.LockActivity;
-import com.example.luongt.misfit.misfithelper.AlarmHelper;
-import com.example.luongt.misfit.misfithelper.CallHelper;
+import com.example.luongt.misfit.model.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.model.misfithelper.CallHelper;
 
 /**
  * Created by luongt on 3/25/2016.

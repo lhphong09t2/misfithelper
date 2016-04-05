@@ -1,8 +1,10 @@
-package com.example.luongt.misfit.misfithelper;
+package com.example.luongt.misfit.model.misfithelper;
 
 import android.content.Context;
 import android.media.AudioManager;
 import android.telephony.SmsManager;
+
+import com.example.luongt.misfit.R;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -28,7 +30,6 @@ public class CallHelper extends BaseMisfitHelper {
 
     @Override
     public void onDoublePress() {
-        //sendMessage("ABC XXX");
     }
 
     @Override
@@ -38,12 +39,17 @@ public class CallHelper extends BaseMisfitHelper {
 
     @Override
     public String getName() {
-        return null;
+        return "Call";
     }
 
     @Override
-    String getKey() {
-        return null;
+    public String getKey() {
+        return "call";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.call;
     }
 
     @Override

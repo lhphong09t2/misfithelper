@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.luongt.misfit.misfithelper.AlarmHelper;
-import com.example.luongt.misfit.model.AlarmSetting;
+import com.example.luongt.misfit.model.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.model.setting.AlarmSetting;
 import com.example.luongt.misfit.receiver.AlarmReceiver;
 import com.example.luongt.misfit.service.HelloService;
 

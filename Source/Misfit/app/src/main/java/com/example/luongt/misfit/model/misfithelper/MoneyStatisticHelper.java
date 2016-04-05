@@ -1,13 +1,15 @@
-package com.example.luongt.misfit.misfithelper;
+package com.example.luongt.misfit.model.misfithelper;
 
 import android.content.Context;
+
+import com.example.luongt.misfit.R;
 
 /**
  * Created by luongt on 3/24/2016.
  */
-public class FuelMoneyStatisticHelper extends BaseMisfitHelper {
+public class MoneyStatisticHelper extends BaseMisfitHelper {
 
-    public FuelMoneyStatisticHelper(Context context) {
+    public MoneyStatisticHelper(Context context) {
         super(context);
     }
 
@@ -17,8 +19,13 @@ public class FuelMoneyStatisticHelper extends BaseMisfitHelper {
     }
 
     @Override
-    String getKey() {
-        return null;
+    public String getKey() {
+        return "money";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.money;
     }
 
     @Override
@@ -33,7 +40,7 @@ public class FuelMoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public String getName() {
-        return null;
+        return "Money";
     }
 
     @Override

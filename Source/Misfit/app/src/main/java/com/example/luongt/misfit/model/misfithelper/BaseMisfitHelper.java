@@ -1,12 +1,14 @@
-package com.example.luongt.misfit.misfithelper;
+package com.example.luongt.misfit.model.misfithelper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.luongt.misfit.model.BaseModel;
+
 /**
  * Created by luongt on 3/28/2016.
  */
-public abstract class BaseMisfitHelper<T> {
+public abstract class BaseMisfitHelper<T> extends BaseModel {
 
     private static final String TAG = "BaseMisfitHelper";
 
@@ -22,7 +24,9 @@ public abstract class BaseMisfitHelper<T> {
         _context = context;
     }
 
-    abstract String getKey();
+    public abstract String getKey();
+
+    public abstract int getIconId();
 
     abstract T createDefaultSetting();
 

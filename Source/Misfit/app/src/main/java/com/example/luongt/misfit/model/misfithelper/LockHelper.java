@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.misfithelper;
+package com.example.luongt.misfit.model.misfithelper;
 
 import android.content.Context;
 
@@ -7,20 +7,25 @@ import com.example.luongt.misfit.R;
 /**
  * Created by luongt on 3/24/2016.
  */
-public class ControlSlideHelper extends BaseMisfitHelper {
+public class LockHelper extends BaseMisfitHelper {
 
-    public ControlSlideHelper(Context context) {
+    public LockHelper(Context context) {
         super(context);
-    }
-
-    @Override
-    String getKey() {
-        return null;
     }
 
     @Override
     Object createDefaultSetting() {
         return null;
+    }
+
+    @Override
+    public String getKey() {
+        return "lock";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.lock;
     }
 
     @Override
@@ -35,7 +40,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public String getName() {
-        return getContext().getString(R.string.control_slide);
+        return "Lock";
     }
 
     @Override
@@ -45,7 +50,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public String getSinglePressTitle() {
-        return getContext().getString(R.string.next_slide);
+        return null;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public String getDoublePressTitle() {
-        return getContext().getString(R.string.back_slide);
+        return null;
     }
 
     @Override
@@ -68,3 +73,4 @@ public class ControlSlideHelper extends BaseMisfitHelper {
         return null;
     }
 }
+

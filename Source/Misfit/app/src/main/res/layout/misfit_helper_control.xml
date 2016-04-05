@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+   <ImageView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:scaleType="fitCenter"
+       android:src="@drawable/misfit_background"/>
+    <ImageView
+        android:id="@+id/misfitIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:scaleType="fitCenter"/>
+    <TextView
+        android:id="@+id/misfitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/misfitIcon"
+        android:src="@drawable/misfit_background"/>
+</merge>
