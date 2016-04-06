@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener,
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements
         runAnimation();
 
         MoneyDBHelper moneyDBHelper = new MoneyDBHelper(this);
-        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Date().toString(), 200, "bbb"));
-        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Date().toString(), 300, "aaa"));
+        moneyDBHelper.RecreateTable();
+        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Random().nextInt(), new Date().toString(), 200, "kkkk"));
         ArrayList<MoneyPayment> moneyPayments = moneyDBHelper.getMoneyPayment();
 
 //        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));

@@ -7,7 +7,6 @@ import android.database.Cursor;
 import com.example.luongt.misfit.model.data.MoneyPayment;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by luongt on 4/6/2016.
@@ -35,9 +34,14 @@ public class MoneyDBHelper extends  BaseDatabaseHelper{
         db = getWritableDatabase();
     }
 
+    public void RecreateTable(){
+        db.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(db);
+    }
+
     public void createNewMoneyPayment(MoneyPayment moneyPayment){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME_ID,new Random().nextInt());
+        values.put(COLUMN_NAME_ID, moneyPayment.getId());
         values.put(COLUMN_NAME_AMOUNT, moneyPayment.getAmountMoney());
         values.put(COLUMN_NAME_CONTENT, moneyPayment.getContent());
         values.put(COLUMN_NAME_TIME, moneyPayment.getTime().toString());
@@ -57,7 +61,8 @@ public class MoneyDBHelper extends  BaseDatabaseHelper{
         Cursor cursor = db.query(TABLE_NAME, projection, null,null,null, null, null);
 
         while (cursor.moveToNext()){
-            moneyPayments.add(new MoneyPayment(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TIME)),
+            moneyPayments.add(new MoneyPayment(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_NAME_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_TIME)),
                     cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_NAME_AMOUNT)),
                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME_CONTENT))));
         }
