@@ -1,11 +1,12 @@
 package com.example.luongt.misfit;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.luongt.misfit.helper.ScreenHelper;
+import com.example.luongt.misfit.service.HelloService;
 
 /**
  * Created by luongt on 4/5/2016.
@@ -16,27 +17,15 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ScreenHelper.initVariables(this);
 
-        new DelayStart().execute();
-    }
+        if (HelloService.getInstance() == null) {
+            startService(new Intent(this, HelloService.class));
+        }
 
-    private class DelayStart extends AsyncTask<Void, Void, Void>
-    {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SplashScreen.this.startActivity(new Intent(SplashScreen.this, MainActivity.class));
             }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            SplashScreen.this.startActivity(new Intent(SplashScreen.this, MainActivity.class));
-        }
+        }, 2000);
     }
 }

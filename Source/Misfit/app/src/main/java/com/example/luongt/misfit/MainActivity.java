@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,6 +13,8 @@ import android.widget.Switch;
 
 import com.example.luongt.misfit.control.MisfitHelperControl;
 import com.example.luongt.misfit.helper.ScreenHelper;
+import com.example.luongt.misfit.model.data.MoneyPayment;
+import com.example.luongt.misfit.model.databasehelper.MoneyDBHelper;
 import com.example.luongt.misfit.model.misfithelper.BaseMisfitHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
 import com.example.luongt.misfit.service.HelloService;
@@ -24,6 +25,7 @@ import com.misfit.misfitlinksdk.publish.MFLError;
 import com.misfit.misfitlinksdk.publish.MFLGestureType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,20 +40,18 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initView();
+
+        runAnimation();
+
+        MoneyDBHelper moneyDBHelper = new MoneyDBHelper(this);
+        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Date().toString(), 200, "bbb"));
+        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Date().toString(), 300, "aaa"));
+        ArrayList<MoneyPayment> moneyPayments = moneyDBHelper.getMoneyPayment();
+
 //        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
 //        _misfitSwitch.setOnCheckedChangeListener(this);
 //        _misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
-
-        if (HelloService.getInstance() == null) {
-            startService(new Intent(this, HelloService.class));
-        }
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                initView();
-            }
-        }, 1000);
     }
 
     @Override
@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements
                     });
                 }
             });
-            startService(new Intent(getBaseContext(), HelloService.class));
         } else {
             MFLSession.sharedInstance().disable();
         }
@@ -86,27 +85,9 @@ public class MainActivity extends AppCompatActivity implements
         {
             final MisfitHelperControl MFControl = (MisfitHelperControl)v;
 
-            // Animation
-            Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.dynamic_scale_in);
+            Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.translate);
             MFControl.startAnimation(inAnimation);
 
-
-            inAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    MFControl.clearAnimation();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
             switch (MFControl.getName())
             {
                 case "Alarm":
@@ -129,27 +110,39 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    ArrayList<MisfitHelperControl> MFControls = new ArrayList<MisfitHelperControl>();
     private void initView() {
-        LinearLayout container = (LinearLayout)findViewById(R.id.container);
+        LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.linearLayout1);
+        LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.linearLayout2);
 
         ArrayList<BaseMisfitHelper> misfitHelpers = HelloService.getInstance().getMisfitHelpers();
-        for (int i = 0; i < misfitHelpers.size(); i+=2) {
+        for (int i = 0; i < misfitHelpers.size(); i++) {
             BaseMisfitHelper<BaseSetting> misfitHelper = misfitHelpers.get(i);
-            MisfitHelperControl MFControl = createMFControl(misfitHelper);
+            final MisfitHelperControl MFControl = createMFControl(misfitHelper);
+            MFControls.add(MFControl);
+            MFControl.setVisibility(View.GONE);
 
-            LinearLayout rowLayout = new LinearLayout(this);
-            rowLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            rowLayout.setGravity(Gravity.CENTER);
-            rowLayout.addView(MFControl);
-
-            if(i+1 <  misfitHelpers.size()) {
-                BaseMisfitHelper<BaseSetting> misfitHelper1 = misfitHelpers.get(i+1);
-                MisfitHelperControl MFControl1 = createMFControl(misfitHelper1);
-                rowLayout.addView(MFControl1);
+            if(i > misfitHelpers.size()/2+0.5){
+                linearLayout2.addView(MFControl);
             }
+            else {
+                linearLayout1.addView(MFControl);
+            }
+        }
+    }
 
-            container.addView(rowLayout);
+    private void runAnimation(){
+        int n = 0;
+        for (int i = MFControls.size()-1; i >= 0; i--){
+            final MisfitHelperControl MFControl = MFControls.get(i);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MFControl.setVisibility(View.VISIBLE);
+                    Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
+                    MFControl.startAnimation(inAnimation);
+                }
+            }, n++*300);
         }
     }
 
@@ -160,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements
         MFControl.setIconId(misfitHelper.getIconId());
         MFControl.setName(misfitHelper.getName());
         MFControl.setLayoutParams(new LinearLayout.LayoutParams(MFControlSize, MFControlSize, 1f));
+
         return MFControl;
     }
+
 }
