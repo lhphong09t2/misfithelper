@@ -1,27 +1,27 @@
-package com.example.luongt.misfit.model.databasehelper;
+package com.example.luongt.misfit.databasehelper;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.example.luongt.misfit.model.data.MoneyPayment;
+import com.example.luongt.misfit.model.table.MoneyPayment;
 
 import java.util.ArrayList;
 
 /**
  * Created by luongt on 4/6/2016.
  */
-public class MoneyDBHelper extends  BaseDatabaseHelper{
-    final String TAG = "MoneyDBHelper";
+public class MoneyPaymentHelper extends  BaseDatabaseHelper{
+    final String TAG = "MoneyPaymentHelper";
 
-    private static final String TABLE_NAME = "MoneyPayment";
+    private static final String TABLE_NAME = "MoneyPaymentFragment";
     private static final String COLUMN_NAME_ID = "id";
     private static final String COLUMN_NAME_AMOUNT = "amount";
     private static final String COLUMN_NAME_CONTENT = "content";
     private static final String COLUMN_NAME_TIME = "time";
 
-    public MoneyDBHelper(Context context) {
-        super(context, "MoneyDBHelper.db");
+    public MoneyPaymentHelper(Context context) {
+        super(context, "MoneyPaymentHelper.db");
 
         SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
@@ -39,7 +39,7 @@ public class MoneyDBHelper extends  BaseDatabaseHelper{
         onCreate(db);
     }
 
-    public void createNewMoneyPayment(MoneyPayment moneyPayment){
+    public void createNew(MoneyPayment moneyPayment){
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_ID, moneyPayment.getId());
         values.put(COLUMN_NAME_AMOUNT, moneyPayment.getAmountMoney());
@@ -49,7 +49,7 @@ public class MoneyDBHelper extends  BaseDatabaseHelper{
         db.insert(TABLE_NAME, null, values);
     }
 
-    public ArrayList<MoneyPayment> getMoneyPayment(){
+    public ArrayList<MoneyPayment> getData(){
         ArrayList<MoneyPayment> moneyPayments = new ArrayList<MoneyPayment>();
         String[] projection = {
                 COLUMN_NAME_ID,
@@ -68,5 +68,23 @@ public class MoneyDBHelper extends  BaseDatabaseHelper{
         }
 
         return moneyPayments;
+    }
+
+    public void deleteData(int id){
+        String selection = COLUMN_NAME_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(id) };
+        db.delete(TABLE_NAME, selection, selectionArgs);
+    }
+
+    public void updateData(MoneyPayment moneyPayment){
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME_AMOUNT, moneyPayment.getAmountMoney());
+        values.put(COLUMN_NAME_CONTENT, moneyPayment.getContent());
+        values.put(COLUMN_NAME_TIME, moneyPayment.getTime());
+
+        String selection = COLUMN_NAME_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(moneyPayment.getId()) };
+
+        int count = db.update(TABLE_NAME, values, selection, selectionArgs);
     }
 }

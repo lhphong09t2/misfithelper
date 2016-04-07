@@ -1,9 +1,9 @@
-package com.example.luongt.misfit.model.data;
+package com.example.luongt.misfit.model.table;
 
 /**
  * Created by luongt on 4/6/2016.
  */
-public class MoneyPayment extends BaseData {
+public class MoneyPayment extends BaseTable {
     private int _id;
     private String _time;
     private double _amountMoney;

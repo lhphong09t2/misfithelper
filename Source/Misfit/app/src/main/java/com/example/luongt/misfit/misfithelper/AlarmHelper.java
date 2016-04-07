@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.model.misfithelper;
+package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
 import android.content.Intent;
@@ -56,7 +56,6 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
         }
         return null;
     }
-
 
     @Override
     protected AlarmSetting parseJsonSetting(String settingJson) {

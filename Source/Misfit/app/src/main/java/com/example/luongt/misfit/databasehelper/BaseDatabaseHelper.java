@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.model.databasehelper;
+package com.example.luongt.misfit.databasehelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

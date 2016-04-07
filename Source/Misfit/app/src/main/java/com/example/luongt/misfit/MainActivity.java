@@ -2,7 +2,6 @@ package com.example.luongt.misfit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -12,11 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.control.MisfitHelperControl;
+import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.helper.ScreenHelper;
-import com.example.luongt.misfit.model.data.MoneyPayment;
-import com.example.luongt.misfit.model.databasehelper.MoneyDBHelper;
-import com.example.luongt.misfit.model.misfithelper.BaseMisfitHelper;
+import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
+import com.example.luongt.misfit.model.table.MoneyPayment;
 import com.example.luongt.misfit.service.HelloService;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCallBack;
@@ -43,12 +42,11 @@ public class MainActivity extends AppCompatActivity implements
 
         initView();
 
-        runAnimation();
+        MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), new Date().toString(), 200, "kkkk");
+        MoneyPaymentHelper moneyDBHelper = new MoneyPaymentHelper(this);
+        moneyDBHelper.createNew(moneyPayment);
 
-        MoneyDBHelper moneyDBHelper = new MoneyDBHelper(this);
-        moneyDBHelper.RecreateTable();
-        moneyDBHelper.createNewMoneyPayment(new MoneyPayment(new Random().nextInt(), new Date().toString(), 200, "kkkk"));
-        ArrayList<MoneyPayment> moneyPayments = moneyDBHelper.getMoneyPayment();
+        ArrayList<MoneyPayment> moneyPayments = moneyDBHelper.getData();
 
 //        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
 //        _misfitSwitch.setOnCheckedChangeListener(this);
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements
             {
                 case "Alarm":
                     startActivity(new Intent(this, AlarmActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    //TODO open setting view
                     break;
                 case "Call":
                     //TODO open setting view
@@ -102,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements
                     //TODO open setting view
                     break;
                 case "Money":
-                    //TODO open setting view
+                    startActivity(new Intent(this, MoneyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     break;
                 case "Slide":
                     //TODO open setting view
@@ -120,8 +117,25 @@ public class MainActivity extends AppCompatActivity implements
         for (int i = 0; i < misfitHelpers.size(); i++) {
             BaseMisfitHelper<BaseSetting> misfitHelper = misfitHelpers.get(i);
             final MisfitHelperControl MFControl = createMFControl(misfitHelper);
+            MFControl.setVisibility(View.INVISIBLE);
             MFControls.add(MFControl);
-            MFControl.setVisibility(View.GONE);
+
+            Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
+            inAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    MFControl.clearAnimation();
+                    MFControl.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+            });
+            inAnimation.setStartOffset(1500-i*300);
+            MFControl.startAnimation(inAnimation);
 
             if(i > misfitHelpers.size()/2+0.5){
                 linearLayout2.addView(MFControl);
@@ -129,21 +143,6 @@ public class MainActivity extends AppCompatActivity implements
             else {
                 linearLayout1.addView(MFControl);
             }
-        }
-    }
-
-    private void runAnimation(){
-        int n = 0;
-        for (int i = MFControls.size()-1; i >= 0; i--){
-            final MisfitHelperControl MFControl = MFControls.get(i);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    MFControl.setVisibility(View.VISIBLE);
-                    Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
-                    MFControl.startAnimation(inAnimation);
-                }
-            }, n++*300);
         }
     }
 

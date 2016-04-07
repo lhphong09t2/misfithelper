@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.model.misfithelper;
+package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +14,9 @@ import org.json.JSONObject;
  */
 public class MoneyStatisticHelper extends BaseMisfitHelper {
     private String TAG = "MoneyStatisticHelper";
+    private final double SPDefaultSetting = 10000;
+    private final double DPDefaultSetting = 20000;
+    private final int DelayTime = 5000;
 
     public MoneyStatisticHelper(Context context) {
         super(context);
@@ -21,7 +24,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     Object createDefaultSetting() {
-        return null;
+        return new MoneySetting(SPDefaultSetting, DPDefaultSetting, DelayTime);
     }
 
     @Override

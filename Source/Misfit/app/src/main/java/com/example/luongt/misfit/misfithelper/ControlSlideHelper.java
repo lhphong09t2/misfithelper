@@ -1,4 +1,4 @@
-package com.example.luongt.misfit.model.misfithelper;
+package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
 

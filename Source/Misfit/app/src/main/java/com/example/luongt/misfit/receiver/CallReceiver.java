@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.telephony.TelephonyManager;
 
 import com.example.luongt.misfit.LockActivity;
-import com.example.luongt.misfit.model.misfithelper.CallHelper;
+import com.example.luongt.misfit.misfithelper.CallHelper;
 
 /**
  * Created by luongt on 3/25/2016.

@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.example.luongt.misfit.model.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.misfithelper.AlarmHelper;
 import com.example.luongt.misfit.receiver.AlarmReceiver;
 import com.example.luongt.misfit.receiver.LockReceiver;
 
