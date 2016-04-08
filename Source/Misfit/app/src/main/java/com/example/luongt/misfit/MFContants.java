@@ -8,4 +8,7 @@ public class MFContants {
     public static final String FINISH_LOCK = "FINISH_LOCK";
     public static final String SNOOZE = "SNOOZE";
     public static final String DISMISS = "DISMISS";
+
+    public static final String ADD_PAYMENT_SP = "ADD_PAYMENT_SP";
+    public static final String ADD_PAYMENT_DP = "ADD_PAYMENT_DP";
 }

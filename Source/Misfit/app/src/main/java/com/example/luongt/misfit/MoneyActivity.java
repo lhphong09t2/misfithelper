@@ -86,14 +86,10 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
     }
 
     @Override
-    public void onPageSelected(int position) {
-
-    }
+    public void onPageSelected(int position) {}
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
+    public void onPageScrollStateChanged(int state) {}
 
     private void handlePaymentFragmentChanged() {
         _paymentButton.setBackgroundColor(Color.WHITE);
@@ -123,7 +119,9 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new MoneyPaymentFragment();
+                    MoneyPaymentFragment fragment = new MoneyPaymentFragment();
+                    //TODO: event
+                    return fragment;
                 case 1:
                     return new Fragment();
                 default:

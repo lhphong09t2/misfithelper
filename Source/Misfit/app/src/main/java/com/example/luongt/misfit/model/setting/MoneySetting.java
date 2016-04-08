@@ -14,7 +14,7 @@ public class MoneySetting {
         this._delayTime = _delayTime;
     }
 
-    public double getMoneySP() {
+    public double getSPMoney() {
 
         return _moneySP;
     }
@@ -23,7 +23,7 @@ public class MoneySetting {
         this._moneySP = _moneySP;
     }
 
-    public double getMoneyDP() {
+    public double getDPMoney() {
         return _moneyDP;
     }
 

@@ -11,11 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.control.MisfitHelperControl;
-import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.helper.ScreenHelper;
 import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
-import com.example.luongt.misfit.model.table.MoneyPayment;
 import com.example.luongt.misfit.service.HelloService;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCallBack;
@@ -24,10 +22,8 @@ import com.misfit.misfitlinksdk.publish.MFLError;
 import com.misfit.misfitlinksdk.publish.MFLGestureType;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener,
@@ -42,15 +38,9 @@ public class MainActivity extends AppCompatActivity implements
 
         initView();
 
-        MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), new Date().toString(), 200, "kkkk");
-        MoneyPaymentHelper moneyDBHelper = new MoneyPaymentHelper(this);
-        moneyDBHelper.createNew(moneyPayment);
-
-        ArrayList<MoneyPayment> moneyPayments = moneyDBHelper.getData();
-
-//        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
-//        _misfitSwitch.setOnCheckedChangeListener(this);
-//        _misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
+        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
+        _misfitSwitch.setOnCheckedChangeListener(this);
+        _misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
     }
 
     @Override
@@ -84,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements
         {
             final MisfitHelperControl MFControl = (MisfitHelperControl)v;
 
-            Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.translate);
+            Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.dynamic_scale_in);
             MFControl.startAnimation(inAnimation);
 
             switch (MFControl.getName())
@@ -108,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    ArrayList<MisfitHelperControl> MFControls = new ArrayList<MisfitHelperControl>();
     private void initView() {
         LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.linearLayout1);
         LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.linearLayout2);
@@ -118,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements
             BaseMisfitHelper<BaseSetting> misfitHelper = misfitHelpers.get(i);
             final MisfitHelperControl MFControl = createMFControl(misfitHelper);
             MFControl.setVisibility(View.INVISIBLE);
-            MFControls.add(MFControl);
 
             Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
             inAnimation.setAnimationListener(new Animation.AnimationListener() {

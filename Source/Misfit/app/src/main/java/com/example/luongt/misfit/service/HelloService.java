@@ -38,7 +38,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     private BaseMisfitHelper _currentMisfitHelper;
 
     private CallHelper _callHelper;
-    public CallHelper get_callHelper() {
+    public CallHelper getCallHelper() {
         return _callHelper;
     }
 

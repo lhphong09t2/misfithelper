@@ -1,13 +1,19 @@
 package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.util.Log;
 
 import com.example.luongt.misfit.R;
+import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.model.setting.MoneySetting;
+import com.example.luongt.misfit.model.table.MoneyPayment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Random;
 
 /**
  * Created by luongt on 3/24/2016.
@@ -18,8 +24,14 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     private final double DPDefaultSetting = 20000;
     private final int DelayTime = 5000;
 
+    private MoneyPaymentHelper _moneyDBHelper;
+
+    private Context _context;
+
     public MoneyStatisticHelper(Context context) {
         super(context);
+        _context = context;
+        _moneyDBHelper = new MoneyPaymentHelper(_context);
     }
 
     @Override
@@ -42,8 +54,8 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         MoneySetting moneySetting = (MoneySetting)setting;
         try {
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("moneySP", moneySetting.getMoneyDP());
-            jsonObj.put("moneyDP", moneySetting.getMoneyDP());
+            jsonObj.put("moneySP", moneySetting.getDPMoney());
+            jsonObj.put("moneyDP", moneySetting.getDPMoney());
             jsonObj.put("delayTime", moneySetting.getDelayTime());
             return jsonObj.toString();
         } catch (JSONException e) {
@@ -73,32 +85,86 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public void onSinglePress() {
-
+        if(countDownTimer == null){
+            countDownTimer.cancel();
+        }
+        addMoneyPayment(((MoneySetting)getSetting()).getSPMoney());
     }
 
+    CountDownTimer countDownTimer;
     @Override
     public String getSinglePressTitle() {
-        return null;
+        return "Add more " + ((MoneySetting)getSetting()).getSPMoney();
     }
 
     @Override
     public void onDoublePress() {
+        if(countDownTimer == null){
+            countDownTimer.cancel();
+        }
 
+        addMoneyPayment(((MoneySetting)getSetting()).getDPMoney());
+    }
+
+    private double _moneyInput = 0;
+    private double _previouseMoney = 0;
+    private boolean _isMoneyPaymentCreating = false;
+
+    private void addMoneyPayment(double money){
+        _previouseMoney = money;
+        _moneyInput += money;
+
+        _isMoneyPaymentCreating = true;
+
+        countDownTimer = new CountDownTimer(((MoneySetting)getSetting()).getDelayTime(), 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {}
+            public void onFinish() {
+                //TODO: Text to speech
+                Log.i(TAG, "onFinish");
+                //TODO: Review
+                MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), Calendar.getInstance().toString(), moneyInput, "");
+                _moneyDBHelper.createNew(moneyPayment);
+                _moneyInput = 0;
+                _isMoneyPaymentCreating = false;
+            }
+        }.start();
     }
 
     @Override
     public String getDoublePressTitle() {
-        return null;
+        return "Add more " + ((MoneySetting)getSetting()).getDPMoney();
     }
 
     @Override
     public void onTripplePress() {
+        if (_isMoneyPaymentCreating )
+        {
+            addMoneyPayment(-_previouseMoney);
 
+            if (_moneyInput < 0)
+            {
+                _moneyInput = 0;
+            }
+        }
+        else
+        {
+            //TODO: remove recent money payment item from database
+        }
     }
 
     @Override
     public String getTriplePressTitle() {
         return null;
+    }
+
+    private OnMoneyPaymentAddedListener _moneyPaymentAddedListener;
+    public void setOnMoneyPaymentAddedListener(OnMoneyPaymentAddedListener moneyPaymentAddedListener){
+        _moneyPaymentAddedListener = moneyPaymentAddedListener;
+    }
+
+    public void removeOnMoneyPaymentAddedListener(){
+        _moneyPaymentAddedListener = null;
     }
 }
 
