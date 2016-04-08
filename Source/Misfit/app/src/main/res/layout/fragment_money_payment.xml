@@ -3,6 +3,60 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@color/background_color">
+
+    <RelativeLayout
+        android:id="@+id/viewDetail"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"></RelativeLayout>
+
+        <ImageView
+            android:id="@+id/addButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/add_button"
+            android:layout_alignBottom="@+id/viewDetail"
+            android:layout_alignEnd="@+id/viewDetail"/>
+
+   <LinearLayout
+       android:id="@+id/datePicker"
+       android:layout_width="match_parent"
+       android:layout_height="30dp"
+       android:orientation="horizontal"
+       android:paddingLeft="@dimen/activity_margin"
+       android:paddingRight="@dimen/activity_margin"
+       android:background="#26ffffff"
+       android:layout_below="@+id/viewDetail">
+       <ImageView
+           android:id="@+id/datePickerButton"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
+           android:src="@drawable/calendar"/>
+       <TextView
+           android:id="@+id/dateView"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:textSize="20dp"
+           android:textColor="@android:color/white"
+           android:gravity="center_vertical"/>
+   </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:layout_below="@+id/datePicker">
+
+        <LinearLayout
+            android:id="@+id/payment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

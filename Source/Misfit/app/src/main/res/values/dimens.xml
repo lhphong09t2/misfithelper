@@ -9,4 +9,6 @@
 
     <dimen name="title_bar_height">54dp</dimen>
 
+    <dimen name="activity_margin">16dp</dimen>
+
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.luongt.misfit.MoneyActivity"
-    android:background="#eeeeee">
+    android:background="@color/background_color">
 
     <LinearLayout
         android:id="@+id/titleBar"
@@ -17,6 +17,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="Payment"
+            android:textColor="@android:color/white"
             android:background="@android:color/white"/>
 
         <Button
@@ -25,6 +26,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="Statistic"
+            android:textColor="@android:color/white"
             android:background="@android:color/transparent"/>
 
         <Button
@@ -33,6 +35,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="Setting"
+            android:textColor="@android:color/white"
             android:background="@android:color/transparent"/>
 
     </LinearLayout>

@@ -17,6 +17,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
+            <Switch
+            android:id="@+id/enableMisfit"
+            style="@style/MainImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -27,14 +33,4 @@
             android:gravity="center">
         </LinearLayout>
     </LinearLayout>
-
-    <!--<Switch-->
-        <!--android:id="@+id/enableMisfit"-->
-        <!--style="@style/MainImageView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="0.1"/>-->
-
-
-
 </LinearLayout>
