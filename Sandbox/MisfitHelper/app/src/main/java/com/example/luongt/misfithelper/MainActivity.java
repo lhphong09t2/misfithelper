@@ -1,16 +1,12 @@
 package com.example.luongt.misfithelper;
 
 import android.app.Instrumentation;
-import android.content.Intent;
 import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputConnection;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -145,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements
 //                                KeyEvent.FLAG_SOFT_KEYBOARD|KeyEvent.FLAG_KEEP_TOUCH_MODE));
 
                         new InputMethodService().sendDownUpKeyEvents(KeyEvent.KEYCODE_CAMERA);
-
 
                         break;
                     case DOUBLE_PRESS:

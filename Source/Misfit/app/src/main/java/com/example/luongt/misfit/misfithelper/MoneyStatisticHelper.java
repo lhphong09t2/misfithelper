@@ -2,6 +2,8 @@ package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.example.luongt.misfit.R;
@@ -85,7 +87,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public void onSinglePress() {
-        if(countDownTimer == null){
+        if(countDownTimer != null){
             countDownTimer.cancel();
         }
         addMoneyPayment(((MoneySetting)getSetting()).getSPMoney());
@@ -99,7 +101,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public void onDoublePress() {
-        if(countDownTimer == null){
+        if(countDownTimer != null){
             countDownTimer.cancel();
         }
 
@@ -116,19 +118,27 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
         _isMoneyPaymentCreating = true;
 
-        countDownTimer = new CountDownTimer(((MoneySetting)getSetting()).getDelayTime(), 1000) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void onTick(long millisUntilFinished) {}
-            public void onFinish() {
-                //TODO: Text to speech
-                Log.i(TAG, "onFinish");
-                //TODO: Review
-                MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), Calendar.getInstance().toString(), moneyInput, "");
-                _moneyDBHelper.createNew(moneyPayment);
-                _moneyInput = 0;
-                _isMoneyPaymentCreating = false;
+            public void run() {
+                countDownTimer = new CountDownTimer(((MoneySetting)getSetting()).getDelayTime(), 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {}
+                    public void onFinish() {
+                        //TODO: Text to speech
+                        Log.i(TAG, "onFinish");
+                        //TODO: Review random
+                        MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), Calendar.getInstance().toString(), _moneyInput, "");
+                        _moneyDBHelper.createNew(moneyPayment);
+                        _moneyInput = 0;
+                        _isMoneyPaymentCreating = false;
+                        try {
+                            _moneyPaymentAddedListener.onAdded();
+                        }catch(Exception e){}
+                    }
+                }.start();
             }
-        }.start();
+        });
     }
 
     @Override
@@ -158,7 +168,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         return null;
     }
 
-    private OnMoneyPaymentAddedListener _moneyPaymentAddedListener;
+    private static OnMoneyPaymentAddedListener _moneyPaymentAddedListener;
     public void setOnMoneyPaymentAddedListener(OnMoneyPaymentAddedListener moneyPaymentAddedListener){
         _moneyPaymentAddedListener = moneyPaymentAddedListener;
     }

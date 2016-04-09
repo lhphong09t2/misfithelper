@@ -3,8 +3,8 @@ package com.example.luongt.misfit.fragment;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +16,7 @@ import com.example.luongt.misfit.R;
 import com.example.luongt.misfit.control.MoneyItem;
 import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.misfithelper.MoneyStatisticHelper;
+import com.example.luongt.misfit.misfithelper.OnMoneyPaymentAddedListener;
 import com.example.luongt.misfit.model.setting.MoneySetting;
 import com.example.luongt.misfit.model.table.MoneyPayment;
 
@@ -26,7 +27,7 @@ import java.util.Random;
 /**
  * Created by luongt on 4/7/2016.
  */
-public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> implements View.OnClickListener {
+public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> implements View.OnClickListener, OnMoneyPaymentAddedListener{
     View view;
     Calendar calendar;
 
@@ -34,12 +35,9 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
 
     private MoneySetting _moneySetting;
 
-
-
     private Context _context;
 
-    CountDownTimer countDownTimer;
-
+    MoneyStatisticHelper moneyStatisticHelper;
 
     @Nullable
     @Override
@@ -61,6 +59,9 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
                 _payment.addView(moneyItem);
             }
         }
+
+        moneyStatisticHelper = new MoneyStatisticHelper(view.getContext());
+        moneyStatisticHelper.setOnMoneyPaymentAddedListener(this);
 
         return view;
     }
@@ -112,5 +113,11 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         MoneyPaymentHelper moneyDBHelper = new MoneyPaymentHelper(_context);
         moneyDBHelper.createNew(moneyPayment);
         _payment.addView(moneyItem);
+    }
+
+    @Override
+    public void onAdded() {
+        Log.i("MoneyPaymentFragment", "onAdded");
+        //TODO: Reload UI
     }
 }
