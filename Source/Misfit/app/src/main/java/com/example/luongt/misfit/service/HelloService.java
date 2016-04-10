@@ -110,7 +110,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     break;
             }
         }
-        else if (CallHelper.isInComingCall) {
+        else if (CallHelper.inCall) {
             Log.e(TAG, "IsInComingCall");
             HandleIncomingCall();
         }

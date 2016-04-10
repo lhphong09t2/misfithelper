@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.luongt.misfit.control.PassCode;
+import com.example.luongt.misfit.receiver.LockReceiver;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -37,6 +38,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(MFContants.FINISH_LOCK)){
                 finish();
+                LockReceiver.isScreenOn = false;
             }
         }
     };

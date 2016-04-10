@@ -132,9 +132,9 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
                         _moneyDBHelper.createNew(moneyPayment);
                         _moneyInput = 0;
                         _isMoneyPaymentCreating = false;
-                        try {
+                        if(_moneyPaymentAddedListener != null) {
                             _moneyPaymentAddedListener.onAdded();
-                        }catch(Exception e){}
+                        }
                     }
                 }.start();
             }

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
  */
 public class CallHelper extends BaseMisfitHelper {
 
-    public static boolean isInComingCall = false;
+    public static boolean inCall = false;
     public static String phoneNumber;
 
     public CallHelper(Context context) {

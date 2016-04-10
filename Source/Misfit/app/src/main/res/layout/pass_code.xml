@@ -83,7 +83,7 @@
         <Button
             style="@style/PasscodeButton"
             android:text="0"
-            android:onClick="onStatisticClick"/>
+            android:onClick="on0Click"/>
         <Button
             style="@style/PasscodeButton"
             android:text="OK"

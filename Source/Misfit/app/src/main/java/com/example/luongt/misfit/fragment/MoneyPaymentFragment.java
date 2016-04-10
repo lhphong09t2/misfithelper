@@ -33,8 +33,6 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
 
     private static final String TAG = "MoneyPaymentFragment";
 
-    private MoneySetting _moneySetting;
-
     private Context _context;
 
     MoneyStatisticHelper moneyStatisticHelper;
@@ -47,8 +45,6 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         initView(view);
 
         _context = view.getContext();
-
-        _moneySetting = (MoneySetting)new MoneyStatisticHelper(_context).getSetting();
 
         MoneyPaymentHelper moneyPaymentHelper = new MoneyPaymentHelper(_context);
         ArrayList<MoneyPayment> moneyPayments = moneyPaymentHelper.getData();
@@ -85,8 +81,8 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         _payment = (LinearLayout)view.findViewById(R.id.payment);
 
         calendar = Calendar.getInstance();
-        String a = calendar.toString();
-        _dateView.setText(String.format("%02d", calendar.get(Calendar.MONTH)) + "/" + String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)));
+        _dateView.setText(String.format("%02d", calendar.get(Calendar.MONTH)) + "/" + String.format("%02d",
+                calendar.get(Calendar.DAY_OF_MONTH)));
     }
 
     @Override
@@ -102,7 +98,7 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         }
         if(v == _addButton)
         {
-            //TODO: get MoneyPayment input
+            //TODO: show dialog to input
             MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(),calendar.toString(), 4232, "cc");
             addnewItem(moneyPayment);
         }

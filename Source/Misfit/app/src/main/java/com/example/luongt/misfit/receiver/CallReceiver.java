@@ -14,15 +14,15 @@ import com.example.luongt.misfit.misfithelper.CallHelper;
 public class CallReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if(intent.getAction().equals("android.intent.action.PHONE_STATE")){
-            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-            if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)){
+        CallHelper.inCall = true;
+        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+        if (state != null) {
+            if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                 CallHelper.phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                CallHelper.isInComingCall = true;
             }
-            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)){
-                CallHelper.isInComingCall = false;
-                if(LockReceiver.isScreenOn) {
+            if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                CallHelper.inCall = false;
+                if (LockReceiver.isScreenOn) {
                     context.startActivity(new Intent(context, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     LockReceiver.isScreenOn = false;
                 }

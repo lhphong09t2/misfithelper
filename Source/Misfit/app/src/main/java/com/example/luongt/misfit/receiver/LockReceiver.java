@@ -18,7 +18,7 @@ public class LockReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         isScreenOn = true;
-        if(!AlarmHelper.isAlarming && !CallHelper.isInComingCall) {
+        if(!AlarmHelper.isAlarming && !CallHelper.inCall) {
             context.startActivity(new Intent(context, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }

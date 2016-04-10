@@ -83,7 +83,6 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         _mediaPlayer.stop();
         if(LockReceiver.isScreenOn) {
             startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            LockReceiver.isScreenOn = false;
         }
     }
 
