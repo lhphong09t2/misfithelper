@@ -24,7 +24,7 @@ public class MoneyPaymentHelper extends  BaseDatabaseHelper{
         super(context, "MoneyPaymentHelper.db");
 
         SQL_CREATE_ENTRIES = "CREATE TABLE " + TABLE_NAME + " (" +
-            COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+            COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COLUMN_NAME_AMOUNT + " DOUBLE, " +
             COLUMN_NAME_CONTENT + " TEXT, " +
             COLUMN_NAME_TIME + " TEXT" + " )";
@@ -41,7 +41,6 @@ public class MoneyPaymentHelper extends  BaseDatabaseHelper{
 
     public void createNew(MoneyPayment moneyPayment){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME_ID, moneyPayment.getId());
         values.put(COLUMN_NAME_AMOUNT, moneyPayment.getAmountMoney());
         values.put(COLUMN_NAME_CONTENT, moneyPayment.getContent());
         values.put(COLUMN_NAME_TIME, moneyPayment.getTime().toString());

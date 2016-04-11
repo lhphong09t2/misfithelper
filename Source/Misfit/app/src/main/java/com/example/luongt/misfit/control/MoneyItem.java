@@ -12,8 +12,6 @@ import com.example.luongt.misfit.model.table.MoneyPayment;
  * Created by luongt on 4/7/2016.
  */
 public class MoneyItem extends RelativeLayout {
-
-
     private TextView _contentPayment;
     private TextView _amountPayment;
 

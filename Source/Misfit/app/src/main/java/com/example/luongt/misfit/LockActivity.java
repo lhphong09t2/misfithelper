@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -86,7 +85,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         localLayoutParams.height = (int) (40 * getResources().getDisplayMetrics().scaledDensity);
-        localLayoutParams.format = PixelFormat.TRANSPARENT;
+        //localLayoutParams.format = PixelFormat.TRANSPARENT;
         return localLayoutParams;
     }
 

@@ -1,6 +1,7 @@
 package com.example.luongt.misfit.fragment;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,12 +22,10 @@ import com.example.luongt.misfit.control.MoneyItem;
 import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.misfithelper.MoneyStatisticHelper;
 import com.example.luongt.misfit.misfithelper.OnMoneyPaymentAddedListener;
-import com.example.luongt.misfit.model.setting.MoneySetting;
 import com.example.luongt.misfit.model.table.MoneyPayment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 /**
  * Created by luongt on 4/7/2016.
@@ -37,24 +40,24 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
 
     MoneyStatisticHelper moneyStatisticHelper;
 
+    private Button _okButton;
+    private Button _cancelButton;
+
+    private EditText _amountMoneyET;
+    private EditText _contentET;
+    private EditText _timeET;
+
+    Dialog dialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_money_payment, container, false);
 
-        initView(view);
-
         _context = view.getContext();
 
-        MoneyPaymentHelper moneyPaymentHelper = new MoneyPaymentHelper(_context);
-        ArrayList<MoneyPayment> moneyPayments = moneyPaymentHelper.getData();
-
-        if(moneyPayments.size()>0){
-            for(MoneyPayment moneyPayment: moneyPayments){
-                MoneyItem moneyItem = new MoneyItem(_context, moneyPayment);
-                _payment.addView(moneyItem);
-            }
-        }
+        initView(view);
+        refreshUI();
 
         moneyStatisticHelper = new MoneyStatisticHelper(view.getContext());
         moneyStatisticHelper.setOnMoneyPaymentAddedListener(this);
@@ -83,6 +86,25 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         calendar = Calendar.getInstance();
         _dateView.setText(String.format("%02d", calendar.get(Calendar.MONTH)) + "/" + String.format("%02d",
                 calendar.get(Calendar.DAY_OF_MONTH)));
+
+        dialog = new Dialog(_context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.money_payment_input);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int)(getResources().getDisplayMetrics().widthPixels*0.95);
+        layoutParams.height = (int)(getResources().getDisplayMetrics().heightPixels*0.50);
+        dialog.getWindow().setAttributes(layoutParams);
+
+        _okButton = (Button)dialog.findViewById(R.id.okButton);
+        _okButton.setOnClickListener(this);
+        _cancelButton = (Button)dialog.findViewById(R.id.cancelButton);
+        _cancelButton.setOnClickListener(this);
+
+        _amountMoneyET = (EditText)dialog.findViewById(R.id.amountMoneyET);
+        _contentET = (EditText)dialog.findViewById(R.id.contentET);
+        _timeET = (EditText)dialog.findViewById(R.id.timeET);
     }
 
     @Override
@@ -98,22 +120,31 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
         }
         if(v == _addButton)
         {
-            //TODO: show dialog to input
-            MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(),calendar.toString(), 4232, "cc");
-            addnewItem(moneyPayment);
+            dialog.show();
         }
-    }
-
-    private void addnewItem(MoneyPayment moneyPayment){
-        MoneyItem moneyItem = new MoneyItem(view.getContext(), moneyPayment);
-        MoneyPaymentHelper moneyDBHelper = new MoneyPaymentHelper(_context);
-        moneyDBHelper.createNew(moneyPayment);
-        _payment.addView(moneyItem);
+        if(v == _okButton){
+            //TODO: get infomation and add to database
+            dialog.dismiss();
+        }
+        if(v == _cancelButton){
+            dialog.dismiss();
+        }
     }
 
     @Override
     public void onAdded() {
-        Log.i("MoneyPaymentFragment", "onAdded");
-        //TODO: Reload UI
+        Log.i(TAG, "onAdded");
+        refreshUI();
+    }
+
+    private void refreshUI(){
+        ArrayList<MoneyPayment> moneyPayments = new MoneyPaymentHelper(_context).getData();
+
+        if(moneyPayments.size()>0){
+            for(MoneyPayment moneyPayment: moneyPayments){
+                MoneyItem moneyItem = new MoneyItem(_context, moneyPayment);
+                _payment.addView(moneyItem);
+            }
+        }
     }
 }
