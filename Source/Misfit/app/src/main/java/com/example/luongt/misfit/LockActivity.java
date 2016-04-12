@@ -7,7 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,17 +20,17 @@ import com.example.luongt.misfit.receiver.LockReceiver;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
 
-    FrameLayout viewStatusBar;
-    FrameLayout viewNavBar;
+    private FrameLayout _frameLayout;
 
-    Button passCodeButton;
+    private Button _passCodeButton;
 
-    PassCode passcode;
+    private PassCode _passcode;
 
-    TextView textView;
-    EditText passcodeEditText;
+    private TextView _textView;
+    private EditText _passcodeEditText;
 
-    WindowManager manager;
+    private WindowManager _manager;
+
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -46,25 +46,36 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setFullScreen();
-        DisableSystemBar();
         showWhenLocked();
+        setFullScreen();
 
-        setContentView(R.layout.activity_lock);
+        _manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
+
+        _frameLayout = new FrameLayout(this);
+        _manager.addView(LayoutInflater.from(this).inflate(R.layout.activity_lock, _frameLayout, true), getLayoutParams());
 
          _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter(MFContants.FINISH_LOCK);
         _localBroadcastManager.registerReceiver(_broadcastReceiver, mIntentFilter);
 
-        passCodeButton = (Button)findViewById(R.id.passCodeButton);
-        passCodeButton.setOnClickListener(this);
+        _passCodeButton = (Button) _frameLayout.findViewById(R.id.passCodeButton);
+        _passCodeButton.setOnClickListener(this);
 
-        passcode = (PassCode)findViewById(R.id.passCode);
-        passcode.setVisibility(View.GONE);
+        _passcode = (PassCode) _frameLayout.findViewById(R.id.passCode);
+        _passcode.setVisibility(View.GONE);
 
-        textView = (TextView)findViewById(R.id.textView);
+        _textView = (TextView) _frameLayout.findViewById(R.id.textView);
 
-        passcodeEditText = (EditText) findViewById(R.id.passcodeEditText);
+        _passcodeEditText = (EditText) _frameLayout.findViewById(R.id.passcodeEditText);
+    }
+
+    public void showWhenLocked(){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     public void setFullScreen(){
@@ -73,46 +84,22 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    public void showWhenLocked(){
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-    }
-
-    public WindowManager.LayoutParams getLayoutParams(int position){
+    public WindowManager.LayoutParams getLayoutParams(){
         WindowManager.LayoutParams localLayoutParams = new WindowManager.LayoutParams();
         localLayoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        localLayoutParams.gravity = position;
         localLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         localLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        localLayoutParams.height = (int) (40 * getResources().getDisplayMetrics().scaledDensity);
-        //localLayoutParams.format = PixelFormat.TRANSPARENT;
+        localLayoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         return localLayoutParams;
-    }
-
-    public void DisableSystemBar(){
-        manager = ((WindowManager) getApplicationContext()
-                .getSystemService(Context.WINDOW_SERVICE));
-
-        WindowManager.LayoutParams layoutTop = getLayoutParams(Gravity.TOP);
-        viewStatusBar = new FrameLayout(this);
-        manager.addView(viewStatusBar, layoutTop);
-
-        WindowManager.LayoutParams layoutBottom = getLayoutParams(Gravity.BOTTOM);
-        viewNavBar = new FrameLayout(this);
-        manager.addView(viewNavBar, layoutBottom);
-    }
-
-    @Override
-    public void onBackPressed() {
-        return;
     }
 
     @Override
     public void onClick(View v) {
-        if(v == passCodeButton){
-            passCodeButton.setVisibility(View.GONE);
-            textView.setText("Enter PIN to unlock phone");
-            passcode.setVisibility(View.VISIBLE);
+        if(v == _passCodeButton){
+            _passCodeButton.setVisibility(View.GONE);
+            _textView.setText("Enter PIN to unlock phone");
+            _passcode.setVisibility(View.VISIBLE);
         }
     }
 
@@ -120,61 +107,59 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
-
-        manager.removeView(viewStatusBar);
-        manager.removeView(viewNavBar);
+        _manager.removeView(_frameLayout);
     }
 
     public void on1Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"1");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"1");
     }
 
     public void on2Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"2");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"2");
     }
 
     public void on3Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"3");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"3");
     }
 
     public void on4Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"4");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"4");
     }
 
     public void on5Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"5");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"5");
     }
 
     public void on6Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"6");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"6");
     }
 
     public void on7Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"7");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"7");
     }
 
     public void on8Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"8");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"8");
     }
 
     public void on9Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"9");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"9");
     }
 
     public void on0Click(View v) {
-        passcodeEditText.setText(passcodeEditText.getText()+"0");
+        _passcodeEditText.setText(_passcodeEditText.getText()+"0");
     }
 
     public void onBackClick(View v) {
-        int n = passcodeEditText.getText().length();
-        if(passcodeEditText.length() > 0) {
-            passcodeEditText.setText(passcodeEditText.getText().replace(n - 1, n, ""));
+        int n = _passcodeEditText.getText().length();
+        if(_passcodeEditText.length() > 0) {
+            _passcodeEditText.setText(_passcodeEditText.getText().replace(n - 1, n, ""));
         }
     }
 
     public void onOKClick(View v) {
-        if(passcodeEditText.getText().toString().equals("1235")){
-            this.finish();
+        if(_passcodeEditText.getText().toString().equals("1235")){
+            finish();
         }
         //TODO: PIN is not correct
     }
