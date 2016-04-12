@@ -137,7 +137,6 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
 
     @Override
     public void onChanged() {
-        Log.i(TAG, "onChanged");
         refreshUI();
     }
 

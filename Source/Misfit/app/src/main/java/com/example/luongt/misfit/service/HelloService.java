@@ -83,7 +83,16 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         _commandMisfit = command.getName();
         int _currentIndex = _misfitHelpers.indexOf(_currentMisfitHelper);
 
-        if (_isSettingMode) {
+        if (CallHelper.inCall) {
+            Log.e(TAG, "IsInComingCall");
+            HandleIncomingCall();
+        }
+        else if (AlarmHelper.isAlarming)
+        {
+            Log.e(TAG, "IsAlarming");
+            HandleAlarm();
+        }
+        else if (_isSettingMode) {
             switch (_commandMisfit) {
                 case "sp":
                     if (_currentIndex != _misfitHelpers.size() - 1) {
@@ -109,15 +118,6 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     speak(getString(R.string.exit_setting_mode));
                     break;
             }
-        }
-        else if (CallHelper.inCall) {
-            Log.e(TAG, "IsInComingCall");
-            HandleIncomingCall();
-        }
-        else if (AlarmHelper.isAlarming)
-        {
-            Log.e(TAG, "IsAlarming");
-            HandleAlarm();
         }
         else {
             Log.e(TAG, "HandleCurrentHelper");

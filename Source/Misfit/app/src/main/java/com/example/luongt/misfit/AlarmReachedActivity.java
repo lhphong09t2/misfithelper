@@ -28,7 +28,7 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
 
     private MediaPlayer _mediaPlayer;
 
-    int timeSnooze = 5;
+    int timeSnooze = 1;
 
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
@@ -42,12 +42,6 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
             }
         }
     };
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-
-        return super.dispatchKeyEvent(event);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

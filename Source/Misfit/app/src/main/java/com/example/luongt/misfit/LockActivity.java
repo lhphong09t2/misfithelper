@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.luongt.misfit.control.PassCode;
+import com.example.luongt.misfit.misfithelper.LockHelper;
 import com.example.luongt.misfit.receiver.LockReceiver;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
@@ -166,5 +167,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     public void Unlock(){
         finish();
         _manager.removeView(_frameLayout);
+        LockReceiver.isScreenOn = false;
     }
 }
