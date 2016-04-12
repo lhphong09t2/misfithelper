@@ -12,8 +12,22 @@ import com.example.luongt.misfit.model.table.MoneyPayment;
  * Created by luongt on 4/7/2016.
  */
 public class MoneyItem extends RelativeLayout {
+
     private TextView _contentPayment;
     private TextView _amountPayment;
+    private TextView _idPayment;
+
+    public TextView get_contentPayment() {
+        return _contentPayment;
+    }
+
+    public TextView get_amountPayment() {
+        return _amountPayment;
+    }
+
+    public TextView get_idPayment() {
+        return _idPayment;
+    }
 
     public MoneyItem(Context context, MoneyPayment moneyPayment) {
         super(context);
@@ -22,13 +36,14 @@ public class MoneyItem extends RelativeLayout {
 
         _contentPayment = (TextView) findViewById(R.id.contentPayment);
         _amountPayment = (TextView)findViewById(R.id.amountPayment);
+        _idPayment = (TextView) findViewById(R.id.contentPayment);
 
         _contentPayment.setText(moneyPayment.getContent());
         _amountPayment.setText(moneyPayment.getAmountMoney()+"");
+        _idPayment.setText(moneyPayment.getId()+"");
     }
 
     private void initView(Context context){
-        LayoutInflater inflater = LayoutInflater.from(context);
-        inflater.inflate(R.layout.money_item, this, true);
+        LayoutInflater.from(context).inflate(R.layout.money_item, this, true);
     }
 }

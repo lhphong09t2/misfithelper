@@ -14,8 +14,10 @@ import com.example.luongt.misfit.model.table.MoneyPayment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
+import java.util.Date;
 
 /**
  * Created by luongt on 3/24/2016.
@@ -96,7 +98,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     CountDownTimer countDownTimer;
     @Override
     public String getSinglePressTitle() {
-        return "Add more " + ((MoneySetting)getSetting()).getSPMoney();
+        return "" + ((MoneySetting)getSetting()).getSPMoney();
     }
 
     @Override
@@ -126,24 +128,43 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
                     public void onTick(long millisUntilFinished) {}
                     public void onFinish() {
                         //TODO: Text to speech
-                        Log.i(TAG, "onFinish");
-                        //TODO: Review random
-                        MoneyPayment moneyPayment = new MoneyPayment(new Random().nextInt(), Calendar.getInstance().toString(), _moneyInput, "");
-                        _moneyDBHelper.createNew(moneyPayment);
+                        MoneyPayment moneyPayment = new MoneyPayment(0, getDateTime(), _moneyInput, "");
+                        addNewToDB(moneyPayment);
                         _moneyInput = 0;
                         _isMoneyPaymentCreating = false;
-                        if(_moneyPaymentAddedListener != null) {
-                            _moneyPaymentAddedListener.onAdded();
-                        }
                     }
                 }.start();
             }
         });
     }
 
+    public void addNewToDB(MoneyPayment moneyPayment){
+        _moneyDBHelper.createNew(moneyPayment);
+
+        if(_moneyPaymentAddedListener != null) {
+            _moneyPaymentAddedListener.onChanged();
+        }
+    }
+
+    public void updatePayment(MoneyPayment moneyPayment){
+        _moneyDBHelper.updateData(moneyPayment);
+
+        if(_moneyPaymentAddedListener != null) {
+            _moneyPaymentAddedListener.onChanged();
+        }
+    }
+
+    public void deletePayment(int id){
+        _moneyDBHelper.deleteData(id);
+
+        if(_moneyPaymentAddedListener != null) {
+            _moneyPaymentAddedListener.onChanged();
+        }
+    }
+
     @Override
     public String getDoublePressTitle() {
-        return "Add more " + ((MoneySetting)getSetting()).getDPMoney();
+        return "" + ((MoneySetting)getSetting()).getDPMoney();
     }
 
     @Override
@@ -159,7 +180,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         }
         else
         {
-            //TODO: remove recent money payment item from database
+            //TODO:Remove recent add
         }
     }
 
@@ -168,13 +189,20 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         return null;
     }
 
-    private static OnMoneyPaymentAddedListener _moneyPaymentAddedListener;
-    public void setOnMoneyPaymentAddedListener(OnMoneyPaymentAddedListener moneyPaymentAddedListener){
+    private static OnMoneyPaymentChangedListener _moneyPaymentAddedListener;
+    public void setOnMoneyPaymentAddedListener(OnMoneyPaymentChangedListener moneyPaymentAddedListener){
         _moneyPaymentAddedListener = moneyPaymentAddedListener;
     }
 
     public void removeOnMoneyPaymentAddedListener(){
         _moneyPaymentAddedListener = null;
+    }
+
+    public String getDateTime(){
+        Date currentLocalTime = Calendar.getInstance().getTime();
+        DateFormat date = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        Log.i(TAG, date.format(currentLocalTime));
+        return date.format(currentLocalTime);
     }
 }
 

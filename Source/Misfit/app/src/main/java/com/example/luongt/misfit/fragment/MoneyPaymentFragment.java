@@ -21,7 +21,7 @@ import com.example.luongt.misfit.R;
 import com.example.luongt.misfit.control.MoneyItem;
 import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.misfithelper.MoneyStatisticHelper;
-import com.example.luongt.misfit.misfithelper.OnMoneyPaymentAddedListener;
+import com.example.luongt.misfit.misfithelper.OnMoneyPaymentChangedListener;
 import com.example.luongt.misfit.model.table.MoneyPayment;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.Calendar;
 /**
  * Created by luongt on 4/7/2016.
  */
-public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> implements View.OnClickListener, OnMoneyPaymentAddedListener{
+public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> implements View.OnClickListener, OnMoneyPaymentChangedListener {
     View view;
     Calendar calendar;
 
@@ -123,27 +123,33 @@ public class MoneyPaymentFragment extends BaseFragment<MoneyStatisticHelper> imp
             dialog.show();
         }
         if(v == _okButton){
-            //TODO: get infomation and add to database
+            MoneyPayment moneyPayment = new MoneyPayment(0,_timeET.getText().toString(), Double.parseDouble(_amountMoneyET.getText().toString()), _contentET.getText().toString());
+            moneyStatisticHelper.addNewToDB(moneyPayment);
             dialog.dismiss();
         }
         if(v == _cancelButton){
             dialog.dismiss();
         }
+        if(v == _moneyItem){
+            //TODO: Show info to view
+        }
     }
 
     @Override
-    public void onAdded() {
-        Log.i(TAG, "onAdded");
+    public void onChanged() {
+        Log.i(TAG, "onChanged");
         refreshUI();
     }
 
+    private MoneyItem _moneyItem;
     private void refreshUI(){
         ArrayList<MoneyPayment> moneyPayments = new MoneyPaymentHelper(_context).getData();
 
         if(moneyPayments.size()>0){
             for(MoneyPayment moneyPayment: moneyPayments){
-                MoneyItem moneyItem = new MoneyItem(_context, moneyPayment);
-                _payment.addView(moneyItem);
+                _moneyItem = new MoneyItem(_context, moneyPayment);
+                _moneyItem.setOnClickListener(this);
+                _payment.addView(_moneyItem);
             }
         }
     }

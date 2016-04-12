@@ -9,11 +9,11 @@ public class MoneyPayment extends BaseTable {
     private double _amountMoney;
     private String _content;
 
-    public MoneyPayment(int _id, String time, double _amountMoney, String _content) {
-        this._id = _id;
+    public MoneyPayment(int id, String time, double amountMoney, String content) {
+        this._id = id;
         this._time = time;
-        this._amountMoney = _amountMoney;
-        this._content = _content;
+        this._amountMoney = amountMoney;
+        this._content = content;
     }
 
     public int getId() {

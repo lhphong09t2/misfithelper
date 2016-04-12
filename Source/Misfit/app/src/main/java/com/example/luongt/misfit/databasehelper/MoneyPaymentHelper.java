@@ -12,8 +12,6 @@ import java.util.ArrayList;
  * Created by luongt on 4/6/2016.
  */
 public class MoneyPaymentHelper extends  BaseDatabaseHelper{
-    final String TAG = "MoneyPaymentHelper";
-
     private static final String TABLE_NAME = "MoneyPaymentFragment";
     private static final String COLUMN_NAME_ID = "id";
     private static final String COLUMN_NAME_AMOUNT = "amount";
@@ -34,7 +32,7 @@ public class MoneyPaymentHelper extends  BaseDatabaseHelper{
         db = getWritableDatabase();
     }
 
-    public void RecreateTable(){
+    public void recreateTable(){
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
     }

@@ -36,7 +36,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(MFContants.FINISH_LOCK)){
-                finish();
+                Unlock();
                 LockReceiver.isScreenOn = false;
             }
         }
@@ -107,11 +107,10 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
-        _manager.removeView(_frameLayout);
     }
 
     public void on1Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"1");
+        _passcodeEditText.setText(_passcodeEditText.getText() + "1");
     }
 
     public void on2Click(View v) {
@@ -159,8 +158,13 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onOKClick(View v) {
         if(_passcodeEditText.getText().toString().equals("1235")){
-            finish();
+            Unlock();
         }
         //TODO: PIN is not correct
+    }
+
+    public void Unlock(){
+        finish();
+        _manager.removeView(_frameLayout);
     }
 }
