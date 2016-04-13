@@ -3,8 +3,8 @@ package com.example.luongt.misfit.service;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
+import com.example.luongt.misfit.LockActivity;
 import com.example.luongt.misfit.MFContants;
 import com.example.luongt.misfit.MisfitEventNotifierApplication;
 import com.example.luongt.misfit.R;
@@ -31,6 +31,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     private static final String TAG = "HelloService";
 
     private ArrayList<BaseMisfitHelper> _misfitHelpers;
+
     public ArrayList<BaseMisfitHelper> getMisfitHelpers() {
         return _misfitHelpers;
     }
@@ -38,25 +39,26 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     private BaseMisfitHelper _currentMisfitHelper;
 
     private CallHelper _callHelper;
+
     public CallHelper getCallHelper() {
         return _callHelper;
     }
 
     private AlarmHelper _alarmHelper;
+
     public AlarmHelper getAlarmHelper() {
         return _alarmHelper;
     }
 
     private String _commandMisfit;
 
-    private  static  HelloService _instance;
-    public static HelloService getInstance()
-    {
-        return  _instance;
+    private static HelloService _instance;
+
+    public static HelloService getInstance() {
+        return _instance;
     }
 
-    public HelloService()
-    {
+    public HelloService() {
         super(TAG);
         _instance = this;
     }
@@ -84,15 +86,10 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         int _currentIndex = _misfitHelpers.indexOf(_currentMisfitHelper);
 
         if (CallHelper.inCall) {
-            Log.e(TAG, "IsInComingCall");
             HandleIncomingCall();
-        }
-        else if (AlarmHelper.isAlarming)
-        {
-            Log.e(TAG, "IsAlarming");
+        } else if (AlarmHelper.isAlarming) {
             HandleAlarm();
-        }
-        else if (_isSettingMode) {
+        } else if (_isSettingMode) {
             switch (_commandMisfit) {
                 case "sp":
                     if (_currentIndex != _misfitHelpers.size() - 1) {
@@ -111,16 +108,20 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     speak(_currentMisfitHelper.getName());
                     break;
                 case "tp":
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MFContants.FINISH_LOCK));
+                    if (LockActivity.getInstance() == null) {
+                        startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                    else {
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MFContants.FINISH_LOCK));
+                    }
+                    _isSettingMode = false;
                     break;
                 default:
                     _isSettingMode = false;
                     speak(getString(R.string.exit_setting_mode));
                     break;
             }
-        }
-        else {
-            Log.e(TAG, "HandleCurrentHelper");
+        } else {
             HandleCurrentHelper();
         }
     }
@@ -188,8 +189,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         }
     }
 
-    private void InitHelpers()
-    {
+    private void InitHelpers() {
         Context context = MisfitEventNotifierApplication.getContext();
         getSharedPreferences(MFContants.CALL_SETTING_KEY, MODE_PRIVATE);
 

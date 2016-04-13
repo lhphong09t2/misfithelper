@@ -113,6 +113,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        _instance = null;
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
     }
 
