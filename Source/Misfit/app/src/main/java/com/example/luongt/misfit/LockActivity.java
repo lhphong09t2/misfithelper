@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.luongt.misfit.control.PassCode;
-import com.example.luongt.misfit.misfithelper.LockHelper;
 import com.example.luongt.misfit.receiver.LockReceiver;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
@@ -43,12 +42,19 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+    private  static LockActivity _instance;
+    public static LockActivity getInstance()
+    {
+        return  _instance;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         showWhenLocked();
         setFullScreen();
+
+        _instance = this;
 
         _manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
 

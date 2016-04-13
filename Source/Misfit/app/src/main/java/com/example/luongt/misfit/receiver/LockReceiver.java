@@ -21,5 +21,8 @@ public class LockReceiver extends BroadcastReceiver {
         if(!AlarmHelper.isAlarming && !CallHelper.inCall) {
             context.startActivity(new Intent(context, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
+        else{
+            LockActivity.getInstance().finish();
+        }
     }
 }
