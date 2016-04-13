@@ -36,7 +36,7 @@ public class MoneyItem extends RelativeLayout {
 
         _contentPayment = (TextView) findViewById(R.id.contentPayment);
         _amountPayment = (TextView)findViewById(R.id.amountPayment);
-        _idPayment = (TextView) findViewById(R.id.contentPayment);
+        _idPayment = (TextView) findViewById(R.id.idPayment);
 
         _contentPayment.setText(moneyPayment.getContent());
         _amountPayment.setText(moneyPayment.getAmountMoney()+"");

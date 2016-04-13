@@ -30,7 +30,6 @@
         <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".LockActivity"
-            android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:noHistory="true">
             <intent-filter>

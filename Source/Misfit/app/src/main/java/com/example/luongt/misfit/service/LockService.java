@@ -18,9 +18,9 @@ public class LockService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        //filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
         _receiver = new LockReceiver();
         registerReceiver(_receiver, filter);
     }

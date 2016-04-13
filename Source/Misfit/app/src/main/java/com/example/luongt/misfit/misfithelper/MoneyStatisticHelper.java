@@ -128,7 +128,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
                     public void onTick(long millisUntilFinished) {}
                     public void onFinish() {
                         //TODO: Text to speech
-                        MoneyPayment moneyPayment = new MoneyPayment(0, getDateTime(), _moneyInput, "");
+                        MoneyPayment moneyPayment = new MoneyPayment(0, getDateTime(), _moneyInput, "N/A");
                         addNewToDB(moneyPayment);
                         _moneyInput = 0;
                         _isMoneyPaymentCreating = false;
@@ -192,10 +192,6 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     private static OnMoneyPaymentChangedListener _moneyPaymentAddedListener;
     public void setOnMoneyPaymentAddedListener(OnMoneyPaymentChangedListener moneyPaymentAddedListener){
         _moneyPaymentAddedListener = moneyPaymentAddedListener;
-    }
-
-    public void removeOnMoneyPaymentAddedListener(){
-        _moneyPaymentAddedListener = null;
     }
 
     public String getDateTime(){

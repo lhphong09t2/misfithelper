@@ -11,33 +11,64 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height">
 
-        <Button
-            android:id="@+id/paymentButton"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Payment"
-            android:textColor="@android:color/white"
-            android:background="@android:color/white"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/paymentButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Payment"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"/>
+            <View
+                android:id="@+id/paymentView"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#26ffffff"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/statisticButton"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Statistic"
-            android:textColor="@android:color/white"
-            android:background="@android:color/transparent"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/statisticButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Statistic"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"/>
+            <View
+                android:id="@+id/statisticView"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#26ffffff"
+                android:visibility="invisible"/>
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/settingButton"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:text="Setting"
-            android:textColor="@android:color/white"
-            android:background="@android:color/transparent"/>
-
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/settingButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Setting"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"/>
+            <View
+                android:id="@+id/settingView"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#26ffffff"
+                android:visibility="invisible"/>
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.v4.view.ViewPager

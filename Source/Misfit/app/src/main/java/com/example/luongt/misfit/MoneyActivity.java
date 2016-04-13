@@ -1,6 +1,5 @@
 package com.example.luongt.misfit;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +21,10 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
     private PagerAdapter _pagerAdapter;
     private ViewPager _viewPager;
 
+    private View _paymentView;
+    private View _statisticView;
+    private View _settingView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,10 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
         _viewPager = ((ViewPager) findViewById(R.id.container));
         _viewPager.setAdapter(_pagerAdapter);
         _viewPager.addOnPageChangeListener(this);
+
+        _paymentView = findViewById(R.id.paymentView);
+        _statisticView = findViewById(R.id.statisticView);
+        _settingView = findViewById(R.id.settingView);
 
         showPaymentFragment();
     }
@@ -92,21 +99,21 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
     public void onPageScrollStateChanged(int state) {}
 
     private void handlePaymentFragmentChanged() {
-        _paymentButton.setBackgroundColor(Color.WHITE);
-        _statisticButton.setBackgroundColor(Color.TRANSPARENT);
-        _settingButton.setBackgroundColor(Color.TRANSPARENT);
+        _paymentView.setVisibility(View.VISIBLE);
+        _statisticView.setVisibility(View.INVISIBLE);
+        _settingView.setVisibility(View.INVISIBLE);
     }
 
     private void handleStatisticFragmentChanged() {
-        _paymentButton.setBackgroundColor(Color.TRANSPARENT);
-        _statisticButton.setBackgroundColor(Color.WHITE);
-        _settingButton.setBackgroundColor(Color.TRANSPARENT);
+        _paymentView.setVisibility(View.INVISIBLE);
+        _statisticView.setVisibility(View.VISIBLE);
+        _settingView.setVisibility(View.INVISIBLE);
     }
 
     private void handleSettingFragmentChanged() {
-        _paymentButton.setBackgroundColor(Color.TRANSPARENT);
-        _statisticButton.setBackgroundColor(Color.TRANSPARENT);
-        _settingButton.setBackgroundColor(Color.WHITE);
+        _paymentView.setVisibility(View.INVISIBLE);
+        _statisticView.setVisibility(View.INVISIBLE);
+        _settingView.setVisibility(View.VISIBLE);
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
