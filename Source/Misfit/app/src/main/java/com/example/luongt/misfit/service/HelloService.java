@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.example.luongt.misfit.LockActivity;
 import com.example.luongt.misfit.MFContants;
 import com.example.luongt.misfit.MisfitEventNotifierApplication;
 import com.example.luongt.misfit.R;
@@ -112,12 +111,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     speak(_currentMisfitHelper.getName());
                     break;
                 case "tp":
-                    if(LockActivity.getInstance() == null){
-                        startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                    else {
-                        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MFContants.FINISH_LOCK));
-                    }
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MFContants.FINISH_LOCK));
                     break;
                 default:
                     _isSettingMode = false;
