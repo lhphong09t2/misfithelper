@@ -98,7 +98,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     CountDownTimer countDownTimer;
     @Override
     public String getSinglePressTitle() {
-        return "" + ((MoneySetting)getSetting()).getSPMoney();
+        return "" + _moneyInput;
     }
 
     @Override
@@ -164,7 +164,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public String getDoublePressTitle() {
-        return "" + ((MoneySetting)getSetting()).getDPMoney();
+        return "" + _moneyInput;
     }
 
     @Override
@@ -196,7 +196,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     public String getDateTime(){
         Date currentLocalTime = Calendar.getInstance().getTime();
-        DateFormat date = new SimpleDateFormat("dd-MM-yyy HH:mm:ss");
+        DateFormat date = new SimpleDateFormat("HH:mm, dd/MM/yy");
         Log.i(TAG, date.format(currentLocalTime));
         return date.format(currentLocalTime);
     }

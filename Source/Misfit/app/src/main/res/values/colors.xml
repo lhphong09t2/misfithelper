@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background_color">#1c0504</color>
+    <color name="money_item_background">#CCffffff</color>
 </resources>

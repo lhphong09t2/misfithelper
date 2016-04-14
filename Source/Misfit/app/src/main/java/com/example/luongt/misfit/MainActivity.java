@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
         initView();
 
         //TODO:delete this line
-        //2342new MoneyPaymentHelper(this).recreateTable();
+       //new MoneyPaymentHelper(this).recreateTable();
 
         _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
         _misfitSwitch.setOnCheckedChangeListener(this);

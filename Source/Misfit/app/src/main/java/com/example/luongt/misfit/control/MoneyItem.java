@@ -16,6 +16,7 @@ public class MoneyItem extends RelativeLayout {
     private TextView _contentPayment;
     private TextView _amountPayment;
     private TextView _idPayment;
+    private TextView _timePayment;
 
     public TextView get_contentPayment() {
         return _contentPayment;
@@ -37,9 +38,11 @@ public class MoneyItem extends RelativeLayout {
         _contentPayment = (TextView) findViewById(R.id.contentPayment);
         _amountPayment = (TextView)findViewById(R.id.amountPayment);
         _idPayment = (TextView) findViewById(R.id.idPayment);
+        _timePayment = (TextView) findViewById(R.id.idPayment);
 
         _contentPayment.setText(moneyPayment.getContent());
-        _amountPayment.setText(moneyPayment.getAmountMoney()+"");
+        _amountPayment.setText((int)moneyPayment.getAmountMoney()+"");
+        //_timePayment.setText(moneyPayment.getTime());
         _idPayment.setText(moneyPayment.getId()+"");
     }
 

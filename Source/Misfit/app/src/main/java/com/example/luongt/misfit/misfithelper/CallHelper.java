@@ -85,7 +85,7 @@ public class CallHelper extends BaseMisfitHelper {
 
     public void silenceRinger(){
         AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, AudioManager.FLAG_VIBRATE);
     }
 
     private void sendMessage(String message){
