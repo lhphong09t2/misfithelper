@@ -30,11 +30,12 @@ public class CallHelper extends BaseMisfitHelper {
 
     @Override
     public void onDoublePress() {
+        endCall();
     }
 
     @Override
     public void onTripplePress() {
-        endCall();
+        sendMessage("I'm busy");
     }
 
     @Override
@@ -83,8 +84,8 @@ public class CallHelper extends BaseMisfitHelper {
     }
 
     public void silenceRinger(){
-        AudioManager am= (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        am.setStreamMute(AudioManager.STREAM_RING, true);
+        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
     }
 
     private void sendMessage(String message){
