@@ -84,6 +84,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     public void performActionByCommand(MFLCommand command, String serialNumber) {
         _commandMisfit = command.getName();
         int _currentIndex = _misfitHelpers.indexOf(_currentMisfitHelper);
+        int maxIndex = 1;
 
         if (CallHelper.inCall) {
             HandleIncomingCall();
@@ -92,7 +93,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         } else if (_isSettingMode) {
             switch (_commandMisfit) {
                 case "sp":
-                    if (_currentIndex != _misfitHelpers.size() - 1) {
+                    if (_currentIndex != maxIndex) {
                         _currentMisfitHelper = _misfitHelpers.get(_currentIndex + 1);
                     } else {
                         _currentMisfitHelper = _misfitHelpers.get(0);
@@ -103,7 +104,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                     if (_currentIndex != 0) {
                         _currentMisfitHelper = _misfitHelpers.get(_currentIndex - 1);
                     } else {
-                        _currentMisfitHelper = _misfitHelpers.get(_misfitHelpers.size() - 1);
+                        _currentMisfitHelper = _misfitHelpers.get(maxIndex);
                     }
                     speak(_currentMisfitHelper.getName());
                     break;
