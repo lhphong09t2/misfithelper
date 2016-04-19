@@ -36,30 +36,9 @@ public class ScreenLockActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onAttachedToWindow() {
-        Log.e("Home Button", "onAttachedToWindow");
-        this.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG | WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        super.onAttachedToWindow();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.e("Home Button", "Clicked");
-        if(keyCode == KeyEvent.KEYCODE_HOME)
-        {
-            Log.e("Home Button", "Clicked");
-        }
-        if(keyCode== KeyEvent.KEYCODE_BACK)
-        {
-            finish();
-        }
-        return false;
-    }
-
-    @Override
     public void onClick(View v) {
-        //manager.removeView(viewStatusBar);
-        //manager.removeView(viewNavBar);
+//        manager.removeView(viewStatusBar);
+//        manager.removeView(viewNavBar);
 
         KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Activity.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
