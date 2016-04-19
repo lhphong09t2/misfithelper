@@ -5,15 +5,11 @@
     android:background="@color/background_color"
     android:orientation="vertical">
 
-    <ScrollView
+    <ListView
+        android:id="@+id/paymentListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/payment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent" >
+    </ListView>
 
     <ImageView
         android:id="@+id/addButton"
@@ -23,5 +19,4 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
         android:src="@drawable/add_button" />
-
 </RelativeLayout>

@@ -114,6 +114,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         _instance = null;
+        _manager.removeView(_frameLayout);
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
     }
 
@@ -173,7 +174,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
     public void Unlock(){
         finish();
-        _manager.removeView(_frameLayout);
         LockReceiver.isScreenOn = false;
     }
 }

@@ -82,6 +82,6 @@ public class MoneyPaymentHelper extends  BaseDatabaseHelper{
         String selection = COLUMN_NAME_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(moneyPayment.getId()) };
 
-        int count = db.update(TABLE_NAME, values, selection, selectionArgs);
+        db.update(TABLE_NAME, values, selection, selectionArgs);
     }
 }

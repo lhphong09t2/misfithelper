@@ -16,25 +16,30 @@ public class MoneyItem extends RelativeLayout {
     private TextView _contentPayment;
     private TextView _amountPayment;
     private TextView _idPayment;
+
     private TextView _timePayment;
 
-    public TextView get_contentPayment() {
-        return _contentPayment;
+    public String getContentPayment() {
+        return _contentPayment.getText().toString();
     }
 
-    public TextView get_amountPayment() {
-        return _amountPayment;
+    public String getAmountPayment() {
+        return _amountPayment.getText().toString();
     }
 
-    public TextView get_idPayment() {
-        return _idPayment;
+    public int getIdPayment() {
+        return Integer.parseInt(_idPayment.getText().toString());
+    }
+
+    public String getTimePayment() {
+        return _timePayment.getText().toString();
     }
 
     public MoneyItem(Context context, MoneyPayment moneyPayment) {
         super(context);
 
         initView(context);
-
+//
         _contentPayment = (TextView) findViewById(R.id.contentPayment);
         _amountPayment = (TextView)findViewById(R.id.amountPayment);
         _timePayment = (TextView) findViewById(R.id.timePayment);

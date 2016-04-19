@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.example.luongt.misfit.control.MisfitHelperControl;
-import com.example.luongt.misfit.databasehelper.MoneyPaymentHelper;
 import com.example.luongt.misfit.helper.ScreenHelper;
 import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
         initView();
 
         //TODO:delete this line
-       new MoneyPaymentHelper(this).recreateTable();
+//       new MoneyPaymentHelper(this).recreateTable();
 
         _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
         _misfitSwitch.setOnCheckedChangeListener(this);
