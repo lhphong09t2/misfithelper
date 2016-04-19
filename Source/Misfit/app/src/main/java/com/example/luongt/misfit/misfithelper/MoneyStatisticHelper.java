@@ -24,13 +24,15 @@ import java.util.Date;
  */
 public class MoneyStatisticHelper extends BaseMisfitHelper {
     private String TAG = "MoneyStatisticHelper";
-    private final double SPDefaultSetting = 10000;
-    private final double DPDefaultSetting = 20000;
+    private final double SPDefaultSetting = 1000;
+    private final double DPDefaultSetting = 2000;
+    private final double TPDefaultSetting = 5000;
     private final int DelayTime = 5000;
 
     private MoneyPaymentHelper _moneyDBHelper;
-
     private Context _context;
+
+    public static boolean isInMoney = false;
 
     public MoneyStatisticHelper(Context context) {
         super(context);
@@ -40,7 +42,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     Object createDefaultSetting() {
-        return new MoneySetting(SPDefaultSetting, DPDefaultSetting, DelayTime);
+        return new MoneySetting(SPDefaultSetting, DPDefaultSetting, TPDefaultSetting, DelayTime);
     }
 
     @Override
@@ -60,6 +62,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("moneySP", moneySetting.getDPMoney());
             jsonObj.put("moneyDP", moneySetting.getDPMoney());
+            jsonObj.put("moneyTP", moneySetting.getTPMoney());
             jsonObj.put("delayTime", moneySetting.getDelayTime());
             return jsonObj.toString();
         } catch (JSONException e) {
@@ -74,8 +77,9 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
             JSONObject jsonObj = new JSONObject();
             double moneySP = jsonObj.getDouble("moneySP");
             double moneyDP = jsonObj.getDouble("moneyDP");
+            double moneyTP = jsonObj.getDouble("moneyTP");
             int delayTime = jsonObj.getInt("delayTime");
-            return new MoneySetting(moneySP, moneyDP, delayTime);
+            return new MoneySetting(moneySP, moneyDP, moneyTP, delayTime);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -89,41 +93,72 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
 
     @Override
     public void onSinglePress() {
-        if(countDownTimer != null){
-            countDownTimer.cancel();
-        }
-        addMoneyPayment(((MoneySetting)getSetting()).getSPMoney());
+        normalPress(((MoneySetting) getSetting()).getSPMoney());
     }
 
-    CountDownTimer countDownTimer;
     @Override
     public String getSinglePressTitle() {
-        return "" + _moneyInput;
+        return "" + (int)_moneyInput;
     }
 
     @Override
     public void onDoublePress() {
-        if(countDownTimer != null){
-            countDownTimer.cancel();
-        }
-
-        addMoneyPayment(((MoneySetting)getSetting()).getDPMoney());
+        normalPress(((MoneySetting) getSetting()).getDPMoney());
     }
 
+
+    @Override
+    public String getDoublePressTitle() {
+        return "" + (int)_moneyInput;
+    }
+
+    @Override
+    public void onTripplePress() {
+        normalPress(((MoneySetting) getSetting()).getTPMoney());
+    }
+
+    @Override
+     public String getTriplePressTitle() {
+        return "" + (int)_moneyInput;
+    }
+
+    private void normalPress(double money){
+        if(_countDownTimer != null){
+            _countDownTimer.cancel();
+        }
+
+        isInMoney = true;
+        _currentInput = money;
+        _moneyInput += _currentInput;
+        addMoneyPayment();
+    }
+
+    @Override
+    public String getLongPressTitle() {
+        return "" + (int)_moneyInput;
+    }
+
+    @Override
+    public void onLongPress(){
+        if(_countDownTimer != null){
+            _countDownTimer.cancel();
+        }
+
+        _moneyInput = _moneyInput - _currentInput + _currentInput*10;
+        _currentInput *= 10;
+
+        addMoneyPayment();
+    }
+
+    private double _currentInput = 0;
     private double _moneyInput = 0;
-    private double _previouseMoney = 0;
-    private boolean _isMoneyPaymentCreating = false;
 
-    private void addMoneyPayment(double money){
-        _previouseMoney = money;
-        _moneyInput += money;
-
-        _isMoneyPaymentCreating = true;
-
+    private CountDownTimer _countDownTimer;
+    private void addMoneyPayment(){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                countDownTimer = new CountDownTimer(((MoneySetting)getSetting()).getDelayTime(), 1000) {
+                _countDownTimer = new CountDownTimer(((MoneySetting)getSetting()).getDelayTime(), 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {}
                     public void onFinish() {
@@ -131,7 +166,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
                         MoneyPayment moneyPayment = new MoneyPayment(0, getDateTime(), _moneyInput, "N/A");
                         addNewToDB(moneyPayment);
                         _moneyInput = 0;
-                        _isMoneyPaymentCreating = false;
+                        isInMoney = false;
                     }
                 }.start();
             }
@@ -160,33 +195,6 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         if(_moneyPaymentAddedListener != null) {
             _moneyPaymentAddedListener.onChanged();
         }
-    }
-
-    @Override
-    public String getDoublePressTitle() {
-        return "" + _moneyInput;
-    }
-
-    @Override
-    public void onTripplePress() {
-        if (_isMoneyPaymentCreating )
-        {
-            addMoneyPayment(-_previouseMoney);
-
-            if (_moneyInput < 0)
-            {
-                _moneyInput = 0;
-            }
-        }
-        else
-        {
-            //TODO:Remove recent add
-        }
-    }
-
-    @Override
-    public String getTriplePressTitle() {
-        return null;
     }
 
     private static OnMoneyPaymentChangedListener _moneyPaymentAddedListener;

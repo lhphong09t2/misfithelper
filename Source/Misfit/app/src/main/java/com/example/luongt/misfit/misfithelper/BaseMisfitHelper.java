@@ -73,6 +73,10 @@ public abstract class BaseMisfitHelper<T> {
         return "Triple press";
     }
 
+    public String getLongPressTitle() {
+        return "Triple press";
+    }
+
     public abstract String getName();
 
     public abstract void onSinglePress();
@@ -80,4 +84,6 @@ public abstract class BaseMisfitHelper<T> {
     public abstract void onDoublePress();
 
     public abstract void onTripplePress();
+
+    public void onLongPress(){}
 }

@@ -184,8 +184,14 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                 speak(_currentMisfitHelper.getTriplePressTitle());
                 break;
             default:
-                _isSettingMode = true;
-                speak(getString(R.string.setting_mode));
+                if(MoneyStatisticHelper.isInMoney == true){
+                    _currentMisfitHelper.onLongPress();
+                    speak(_currentMisfitHelper.getLongPressTitle());
+                }
+                else {
+                    _isSettingMode = true;
+                    speak(getString(R.string.setting_mode));
+                }
                 break;
         }
     }
@@ -198,8 +204,8 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         _alarmHelper = new AlarmHelper(context);
 
         _misfitHelpers = new ArrayList<BaseMisfitHelper>();
-        _misfitHelpers.add(new ControlSlideHelper(context));
         _misfitHelpers.add(new MoneyStatisticHelper(context));
+        _misfitHelpers.add(new ControlSlideHelper(context));
         _misfitHelpers.add(new LockHelper(context));
         _misfitHelpers.add(_alarmHelper);
         _misfitHelpers.add(_callHelper);
