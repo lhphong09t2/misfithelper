@@ -2,6 +2,8 @@ package com.example.luongt.misfit.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.example.luongt.misfit.LockActivity;
@@ -59,23 +61,27 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
     }
 
     public HelloService() {
-        super(TAG);
         _instance = this;
+        MFLSession.build(MisfitEventNotifierApplication.getContext());
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        MFLSession.sharedInstance().setGestureCommandDelegate(this);
-        MFLSession.sharedInstance().setStateTrackingDelegate(this);
+        if (MFLSession.sharedInstance() != null) {
+            MFLSession.sharedInstance().setGestureCommandDelegate(this);
+            MFLSession.sharedInstance().setStateTrackingDelegate(this);
+        }
 
         startService(new Intent(this, LockService.class));
         InitHelpers();
     }
 
+    @Nullable
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private boolean _isSettingMode = false;
@@ -111,8 +117,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                 case "tp":
                     if (LockActivity.getInstance() == null) {
                         startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                    else {
+                    } else {
                         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MFContants.FINISH_LOCK));
                     }
                     _isSettingMode = false;
@@ -184,11 +189,10 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
                 speak(_currentMisfitHelper.getTriplePressTitle());
                 break;
             default:
-                if(MoneyStatisticHelper.isInMoney == true){
+                if (MoneyStatisticHelper.isInMoney == true) {
                     _currentMisfitHelper.onLongPress();
                     speak(_currentMisfitHelper.getLongPressTitle());
-                }
-                else {
+                } else {
                     _isSettingMode = true;
                     speak(getString(R.string.setting_mode));
                 }

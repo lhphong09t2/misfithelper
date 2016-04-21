@@ -1,7 +1,7 @@
 package com.example.luongt.misfit.service;
 
 import android.annotation.TargetApi;
-import android.app.IntentService;
+import android.app.Service;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
 
@@ -12,12 +12,12 @@ import java.util.Locale;
 /**
  * Created by luongt on 3/28/2016.
  */
-public abstract class TTSService extends IntentService {
+public abstract class TTSService extends Service {
     private TextToSpeech _textToSpeech;
 
-    public TTSService(String name) {
-        super(name);
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
         _textToSpeech = new TextToSpeech(MisfitEventNotifierApplication.getContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -45,4 +45,5 @@ public abstract class TTSService extends IntentService {
     private void ttsGreater21(String text) {
         _textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
     }
+
 }
