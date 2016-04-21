@@ -5,6 +5,10 @@ import android.media.AudioManager;
 import android.telephony.SmsManager;
 
 import com.example.luongt.misfit.R;
+import com.example.luongt.misfit.model.setting.CallSetting;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -16,9 +20,10 @@ import java.util.concurrent.Executors;
  */
 public class CallHelper extends BaseMisfitHelper {
 
+    private String _message = "I'm busy";
+
     public static boolean inCall = false;
     public static String phoneNumber;
-
     public CallHelper(Context context) {
         super(context);
     }
@@ -55,31 +60,30 @@ public class CallHelper extends BaseMisfitHelper {
 
     @Override
     Object createDefaultSetting() {
-        return null;
+        return new CallSetting(_message);
     }
 
     @Override
     String getSettingJson(Object setting) {
+        CallSetting callSetting = (CallSetting) setting;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("message", callSetting.getMessage());
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     Object parseJsonSetting(String settingJson) {
-        return null;
-    }
-
-    @Override
-    public String getSinglePressTitle() {
-        return null;
-    }
-
-    @Override
-    public String getDoublePressTitle() {
-        return null;
-    }
-
-    @Override
-    public String getTriplePressTitle() {
+        try {
+            JSONObject jsonObject = new JSONObject(settingJson);
+            return new CallSetting(jsonObject.getString("message"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -91,7 +95,7 @@ public class CallHelper extends BaseMisfitHelper {
     private void sendMessage(String message){
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, ((CallSetting)getSetting()).getMessage(), null, null);
         }
         catch (Exception e){}
     }
