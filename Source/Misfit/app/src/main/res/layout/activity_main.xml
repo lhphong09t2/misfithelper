@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.luongt.misfit.MainActivity"
-    android:background="@drawable/main_background">
+    android:background="@color/colorPrimaryDark">
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

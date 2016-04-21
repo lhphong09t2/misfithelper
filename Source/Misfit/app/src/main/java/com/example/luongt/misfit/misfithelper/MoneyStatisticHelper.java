@@ -60,7 +60,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
         MoneySetting moneySetting = (MoneySetting)setting;
         try {
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("moneySP", moneySetting.getDPMoney());
+            jsonObj.put("moneySP", moneySetting.getSPMoney());
             jsonObj.put("moneyDP", moneySetting.getDPMoney());
             jsonObj.put("moneyTP", moneySetting.getTPMoney());
             jsonObj.put("delayTime", moneySetting.getDelayTime());
@@ -74,7 +74,7 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     @Override
     MoneySetting parseJsonSetting(String settingJson) {
         try {
-            JSONObject jsonObj = new JSONObject();
+            JSONObject jsonObj = new JSONObject(settingJson);
             double moneySP = jsonObj.getDouble("moneySP");
             double moneyDP = jsonObj.getDouble("moneyDP");
             double moneyTP = jsonObj.getDouble("moneyTP");
@@ -198,14 +198,13 @@ public class MoneyStatisticHelper extends BaseMisfitHelper {
     }
 
     private static OnMoneyPaymentChangedListener _moneyPaymentAddedListener;
-    public void setOnMoneyPaymentAddedListener(OnMoneyPaymentChangedListener moneyPaymentAddedListener){
+    public void setOnMoneyPaymentChangedListener(OnMoneyPaymentChangedListener moneyPaymentAddedListener){
         _moneyPaymentAddedListener = moneyPaymentAddedListener;
     }
 
     public String getDateTime(){
         Date currentLocalTime = Calendar.getInstance().getTime();
         DateFormat date = new SimpleDateFormat("HH:mm, dd/MM/yy");
-        Log.i(TAG, date.format(currentLocalTime));
         return date.format(currentLocalTime);
     }
 }

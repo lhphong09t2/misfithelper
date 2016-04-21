@@ -20,7 +20,7 @@ public class MoneySetting {
         return _moneySP;
     }
 
-    public void setSPMoney(int _moneySP) {
+    public void setSPMoney(double _moneySP) {
         this._moneySP = _moneySP;
     }
 
@@ -28,7 +28,7 @@ public class MoneySetting {
         return _moneyDP;
     }
 
-    public void setDPMoney(int _moneyDP) {
+    public void setDPMoney(double _moneyDP) {
         this._moneyDP = _moneyDP;
     }
 

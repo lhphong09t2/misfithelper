@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +25,7 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
     private Button snoozeButton;
     private Button dismissButton;
 
-    private MediaPlayer _mediaPlayer;
+    AlarmHelper alarmHelper;
 
     int timeSnooze = 1;
 
@@ -64,9 +63,9 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
 
         AlarmHelper.isAlarming = true;
 
-        _mediaPlayer = MediaPlayer.create(this, R.raw.cuckoo);
-        _mediaPlayer.setLooping(true);
-        _mediaPlayer.start();
+        alarmHelper = new AlarmHelper(this);
+
+        alarmHelper.playAudio(R.raw.cuckoo);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         super.onDestroy();
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
         AlarmHelper.isAlarming = false;
-        _mediaPlayer.stop();
+        alarmHelper.stopAudio();
         if(LockReceiver.isScreenOn) {
             startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }

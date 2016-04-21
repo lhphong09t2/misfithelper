@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.luongt.misfit.fragment.MoneyPaymentFragment;
+import com.example.luongt.misfit.fragment.MoneyPaymentSettingFragment;
 
 public class MoneyActivity extends FragmentActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
@@ -126,13 +127,11 @@ public class MoneyActivity extends FragmentActivity implements View.OnClickListe
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    MoneyPaymentFragment fragment = new MoneyPaymentFragment();
-                    //TODO: event
-                    return fragment;
+                    return new MoneyPaymentFragment();
                 case 1:
                     return new Fragment();
                 default:
-                    return new Fragment();
+                    return new MoneyPaymentSettingFragment();
             }
         }
 

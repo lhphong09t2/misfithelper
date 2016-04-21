@@ -65,7 +65,8 @@
         <service android:name=".service.HelloService" />
         <service android:name=".service.LockService" />
 
-        <activity android:name=".MoneyActivity"></activity>
+        <activity android:name=".MoneyActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

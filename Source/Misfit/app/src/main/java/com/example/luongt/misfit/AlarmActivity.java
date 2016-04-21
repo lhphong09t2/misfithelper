@@ -2,7 +2,6 @@ package com.example.luongt.misfit;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -23,40 +21,38 @@ import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity implements View.OnClickListener
 {
-    private AlarmManager alarmMgr;
-    private PendingIntent alarmIntent;
-
-    private TextView timeTextView;
-    private Button saveButton;
-    private CheckBox repeatCheckbox;
-
+    private AlarmManager _alarmMgr;
+    private PendingIntent _alarmIntent;
     private AlarmHelper _alarmHelper;
+
+    private Button _enableButton;
+    private CheckBox _repeatCB;
+    private TimePicker _alarmTimePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
-        saveButton = (Button)findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(this);
+        _enableButton = (Button)findViewById(R.id.enableButton);
+        _enableButton.setOnClickListener(this);
 
-        timeTextView = (TextView)findViewById(R.id.timeTextView);
-        timeTextView.setOnClickListener(this);
+        _alarmTimePicker = (TimePicker)findViewById(R.id.alarmTimePicker);
 
-        repeatCheckbox = (CheckBox)findViewById(R.id.repeatCheckbox);
+        _repeatCB = (CheckBox)findViewById(R.id.repeatCB);
 
         _alarmHelper = HelloService.getInstance().getAlarmHelper();
-
         if(_alarmHelper != null){
-            timeTextView.setText(_alarmHelper.getSetting().getHour() + ":" + String.format("%02d", _alarmHelper.getSetting().getMinute()));
-            repeatCheckbox.setChecked(_alarmHelper.getSetting().getIsRepeat());
+            _alarmTimePicker.setCurrentHour(_alarmHelper.getSetting().getHour());
+            _alarmTimePicker.setCurrentMinute(_alarmHelper.getSetting().getMinute());
+            _repeatCB.setChecked(_alarmHelper.getSetting().isRepeat());
         }
     }
 
     private void setAlarm(int hour, int minute, Boolean repeat){
-        alarmMgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        _alarmMgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        _alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -64,34 +60,23 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         calendar.set(Calendar.MINUTE, minute);
 
         if(repeat){
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
+            _alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, _alarmIntent);
         }
         else {
-            alarmMgr.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(), alarmIntent);
+            _alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), _alarmIntent);
         }
     }
 
-    private int hourOfDay;
-    private int minute;
-
     @Override
     public void onClick(View v) {
-        if(v == timeTextView) {
-            new TimePickerDialog(this, TimePickerDialog.BUTTON_NEGATIVE, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    timeTextView.setText(hourOfDay+":"+String.format("%02d", minute));
-                    AlarmActivity.this.hourOfDay = hourOfDay;
-                    AlarmActivity.this.minute = minute;
-                }
-            },12, 00, false).show();
-        }
-        if(v == saveButton){
-            _alarmHelper.saveSetting(new AlarmSetting(hourOfDay, minute, repeatCheckbox.isChecked()));
+        if(v == _enableButton){
+            int hour = _alarmTimePicker.getCurrentHour(); //TODO: WTF? getHour() require API23 and getCurrentHour() in deprecated!!!
+            int minute = _alarmTimePicker.getCurrentMinute();
+            _alarmHelper.saveSetting(new AlarmSetting(hour, minute, _repeatCB.isChecked(), true));
 
-            Toast.makeText(this, "Set alarm at "+hourOfDay+":"+String.format("%02d", minute), Toast.LENGTH_LONG).show();
-            setAlarm(hourOfDay, minute, repeatCheckbox.isChecked());
+            Toast.makeText(this, "Set alarm at "+hour+":" +minute, Toast.LENGTH_LONG).show();
+            setAlarm(hour, minute, _repeatCB.isChecked());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.luongt.misfit.service;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -12,7 +11,7 @@ import com.example.luongt.misfit.receiver.LockReceiver;
 /**
  * Created by luongt on 3/25/2016.
  */
-public class LockService extends Service {
+public class LockService extends TTSService {
     private BroadcastReceiver _receiver;
 
     @Override

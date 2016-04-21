@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -112,9 +113,11 @@ public class MainActivity extends AppCompatActivity implements
             MFControl.setVisibility(View.INVISIBLE);
 
             Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
+            inAnimation.setInterpolator(new OvershootInterpolator(0.8f));
             inAnimation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
-                public void onAnimationStart(Animation animation) {}
+                public void onAnimationStart(Animation animation) {
+                }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -123,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {}
+                public void onAnimationRepeat(Animation animation) {
+                }
             });
             inAnimation.setStartOffset(1500-i*300);
             MFControl.startAnimation(inAnimation);

@@ -8,6 +8,7 @@
         <EditText
             android:id="@+id/passcodeEditText"
             android:hint="****"
+            android:textColorHint="@color/textColor"
             android:textColor="#ffffff"
             android:maxLength="4"
             android:focusableInTouchMode="false"
