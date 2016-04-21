@@ -3,11 +3,17 @@ package com.example.luongt.misfit.misfithelper;
 import android.content.Context;
 
 import com.example.luongt.misfit.R;
+import com.example.luongt.misfit.model.setting.LockSetting;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by luongt on 3/24/2016.
  */
 public class LockHelper extends BaseMisfitHelper {
+
+    private String _passcode = "1235";
 
     public LockHelper(Context context) {
         super(context);
@@ -15,7 +21,7 @@ public class LockHelper extends BaseMisfitHelper {
 
     @Override
     Object createDefaultSetting() {
-        return null;
+        return new LockSetting(_passcode);
     }
 
     @Override
@@ -30,11 +36,25 @@ public class LockHelper extends BaseMisfitHelper {
 
     @Override
     String getSettingJson(Object setting) {
+        LockSetting lockSetting = (LockSetting)setting;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("passcode", lockSetting.getPasscode());
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
     Object parseJsonSetting(String settingJson) {
+        try {
+            JSONObject jsonObject = new JSONObject(settingJson);
+            return new LockSetting(jsonObject.getString("passcode"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -49,18 +69,8 @@ public class LockHelper extends BaseMisfitHelper {
     }
 
     @Override
-    public String getSinglePressTitle() {
-        return null;
-    }
-
-    @Override
     public void onDoublePress() {
 
-    }
-
-    @Override
-    public String getDoublePressTitle() {
-        return null;
     }
 
     @Override
@@ -68,9 +78,5 @@ public class LockHelper extends BaseMisfitHelper {
 
     }
 
-    @Override
-    public String getTriplePressTitle() {
-        return null;
-    }
 }
 
