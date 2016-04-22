@@ -10,5 +10,9 @@
     <dimen name="title_bar_height">54dp</dimen>
 
     <dimen name="activity_margin">16dp</dimen>
+    
+    <dimen name="large_text">30dp</dimen>
+    <dimen name="medium_text">30dp</dimen>
+    <dimen name="small_text">30dp</dimen>
 
 </resources>

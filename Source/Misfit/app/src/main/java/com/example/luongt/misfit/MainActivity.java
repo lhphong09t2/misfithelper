@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
+import com.example.luongt.misfit.control.EnableButton;
 import com.example.luongt.misfit.control.MisfitHelperControl;
-import com.example.luongt.misfit.helper.ScreenHelper;
 import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
 import com.example.luongt.misfit.service.HelloService;
@@ -26,11 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements
-        CompoundButton.OnCheckedChangeListener,
-        View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Switch _misfitSwitch;
+    private EnableButton _enableButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,39 +38,33 @@ public class MainActivity extends AppCompatActivity implements
         //TODO:delete this line
 //       new MoneyPaymentHelper(this).recreateTable();
 
-        _misfitSwitch = ((Switch) findViewById(R.id.enableMisfit));
-        _misfitSwitch.setOnCheckedChangeListener(this);
-        _misfitSwitch.setChecked(MFLSession.sharedInstance().isEnabled());
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        final Switch switchEnable = (Switch) buttonView;
-
-        if (switchEnable.isChecked()) {
-            MFLSession.sharedInstance().enable("100", "6hbIEM2QbKtOasV4E7b3BvSc6fpId4Cj", new MFLCallBack() {
-                @Override
-                public void onResponse(final Map<String, Map<MFLGestureType, MFLCommand>> commandMapping, final List<MFLCommand> supportedCommands, final MFLError error) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (error != null) {
-                                switchEnable.setChecked(false);
-                                return;
-                            }
-                            switchEnable.setChecked(MFLSession.sharedInstance().isEnabled());
-                        }
-                    });
-                }
-            });
-        } else {
-            MFLSession.sharedInstance().disable();
-        }
     }
 
     @Override
     public void onClick(View v) {
-        if (v instanceof MisfitHelperControl)
+        if(v == _enableButton){
+            if (_enableButton.isChecked()) {
+                MFLSession.sharedInstance().enable("100", "6hbIEM2QbKtOasV4E7b3BvSc6fpId4Cj", new MFLCallBack() {
+                    @Override
+                    public void onResponse(final Map<String, Map<MFLGestureType, MFLCommand>> commandMapping, final List<MFLCommand> supportedCommands, final MFLError error) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (error != null) {
+                                    _enableButton.setChecked(false);
+                                    return;
+                                }
+                                _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
+                            }
+                        });
+                    }
+                });
+            } else {
+                MFLSession.sharedInstance().disable();
+            }
+            _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
+        }
+        else if (v instanceof MisfitHelperControl)
         {
             final MisfitHelperControl MFControl = (MisfitHelperControl)v;
 
@@ -106,33 +96,26 @@ public class MainActivity extends AppCompatActivity implements
         LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.linearLayout1);
         LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.linearLayout2);
 
+        _enableButton = new EnableButton(this, MFLSession.sharedInstance().isEnabled());
+        _enableButton.setOnClickListener(this);
+
+        Animation enableAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
+        enableAnimation.setInterpolator(new OvershootInterpolator(0.8f));
+        enableAnimation.setStartOffset(1500 + 300);
+        _enableButton.startAnimation(enableAnimation);
+        linearLayout1.addView(_enableButton);
+
         ArrayList<BaseMisfitHelper> misfitHelpers = HelloService.getInstance().getMisfitHelpers();
         for (int i = 0; i < misfitHelpers.size(); i++) {
             BaseMisfitHelper<BaseSetting> misfitHelper = misfitHelpers.get(i);
             final MisfitHelperControl MFControl = createMFControl(misfitHelper);
-            MFControl.setVisibility(View.INVISIBLE);
 
             Animation inAnimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.translate);
             inAnimation.setInterpolator(new OvershootInterpolator(0.8f));
-            inAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    MFControl.clearAnimation();
-                    MFControl.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-            inAnimation.setStartOffset(1500-i*300);
+            inAnimation.setStartOffset(1500 - i * 300);
             MFControl.startAnimation(inAnimation);
 
-            if(i > misfitHelpers.size()/2+0.5){
+            if(i > misfitHelpers.size()/2-1){
                 linearLayout2.addView(MFControl);
             }
             else {
@@ -142,14 +125,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private MisfitHelperControl createMFControl(BaseMisfitHelper<BaseSetting> misfitHelper){
-        final int MFControlSize = ScreenHelper.toPixel(124);
         MisfitHelperControl MFControl = new MisfitHelperControl(this);
         MFControl.setOnClickListener(this);
         MFControl.setIconId(misfitHelper.getIconId());
         MFControl.setName(misfitHelper.getName());
-        MFControl.setLayoutParams(new LinearLayout.LayoutParams(MFControlSize, MFControlSize, 1f));
 
         return MFControl;
     }
-
 }
