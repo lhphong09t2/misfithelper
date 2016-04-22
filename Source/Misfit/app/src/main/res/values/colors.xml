@@ -8,4 +8,8 @@
 
     <color name="enableColor">#EA8465</color>
     <color name="disableColor">#3B484E</color>
+
+    <color name="blueColor">#3B8EAA</color>
+
+    <color name="pressColor">#7C8589</color>
 </resources>

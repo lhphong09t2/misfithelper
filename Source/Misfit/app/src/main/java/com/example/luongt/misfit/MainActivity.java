@@ -41,55 +41,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        if(v == _enableButton){
-            if (_enableButton.isChecked()) {
-                MFLSession.sharedInstance().enable("100", "6hbIEM2QbKtOasV4E7b3BvSc6fpId4Cj", new MFLCallBack() {
-                    @Override
-                    public void onResponse(final Map<String, Map<MFLGestureType, MFLCommand>> commandMapping, final List<MFLCommand> supportedCommands, final MFLError error) {
-                        runOnUiThread(new Runnable() {
+    protected void onResume() {
+        super.onResume();
+
+        _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
+    }
+
+    @Override
+    public void onClick(final View v) {
+        final Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.dynamic_scale_in);
+        inAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                if (v == _enableButton) {
+                    if (_enableButton.isChecked()) {
+                        MFLSession.sharedInstance().enable("100", "6hbIEM2QbKtOasV4E7b3BvSc6fpId4Cj", new MFLCallBack() {
                             @Override
-                            public void run() {
-                                if (error != null) {
-                                    _enableButton.setChecked(false);
-                                    return;
-                                }
-                                _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
+                            public void onResponse(final Map<String, Map<MFLGestureType, MFLCommand>> commandMapping, final List<MFLCommand> supportedCommands, final MFLError error) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (error != null) {
+                                            _enableButton.setChecked(false);
+                                            return;
+                                        }
+                                        _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
+                                    }
+                                });
                             }
                         });
+                    } else {
+                        MFLSession.sharedInstance().disable();
                     }
-                });
-            } else {
-                MFLSession.sharedInstance().disable();
-            }
-            _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
-        }
-        else if (v instanceof MisfitHelperControl)
-        {
-            final MisfitHelperControl MFControl = (MisfitHelperControl)v;
+                } else if (v instanceof MisfitHelperControl) {
+                    final MisfitHelperControl MFControl = (MisfitHelperControl) v;
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            switch (MFControl.getName()) {
+                                case "Alarm":
+                                    startActivity(new Intent(MainActivity.this, AlarmActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    break;
+                                case "Call":
+                                    //TODO open setting view
+                                    break;
+                                case "Lock":
+                                    //TODO open setting view
+                                    break;
+                                case "Money":
+                                    startActivity(new Intent(MainActivity.this, MoneyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    break;
+                                case "Slide":
+                                    //TODO open setting view
+                                    break;
+                            }
 
-            Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.dynamic_scale_in);
-            MFControl.startAnimation(inAnimation);
-
-            switch (MFControl.getName())
-            {
-                case "Alarm":
-                    startActivity(new Intent(this, AlarmActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    break;
-                case "Call":
-                    //TODO open setting view
-                    break;
-                case "Lock":
-                    //TODO open setting view
-                    break;
-                case "Money":
-                    startActivity(new Intent(this, MoneyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    break;
-                case "Slide":
-                    //TODO open setting view
-                    break;
+                        }
+                    }.start();
+                }
             }
-        }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+        });
+
+        v.startAnimation(inAnimation);
     }
 
     private void initView() {

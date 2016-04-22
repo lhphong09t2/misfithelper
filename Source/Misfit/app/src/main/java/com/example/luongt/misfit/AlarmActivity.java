@@ -24,10 +24,13 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private AlarmManager _alarmMgr;
     private PendingIntent _alarmIntent;
     private AlarmHelper _alarmHelper;
+    private AlarmSetting _alarmSetting;
 
     private Button _enableButton;
     private CheckBox _repeatCB;
     private TimePicker _alarmTimePicker;
+
+    private boolean isEnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,20 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
 
         _alarmHelper = HelloService.getInstance().getAlarmHelper();
         if(_alarmHelper != null){
-            _alarmTimePicker.setCurrentHour(_alarmHelper.getSetting().getHour());
-            _alarmTimePicker.setCurrentMinute(_alarmHelper.getSetting().getMinute());
-            _repeatCB.setChecked(_alarmHelper.getSetting().isRepeat());
+            _alarmSetting = _alarmHelper.getSetting();
+            _alarmTimePicker.setCurrentHour(_alarmSetting.getHour());
+            _alarmTimePicker.setCurrentMinute(_alarmSetting.getMinute());
+            _repeatCB.setChecked(_alarmSetting.isRepeat());
+            isEnable = _alarmSetting.isEnable();
+            if(isEnable) {
+                //TODO: deprecated
+                _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
+                _enableButton.setText("TURN OFF ALARM");
+            }
+            else {
+                _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
+                _enableButton.setText("TURN ON ALARM");
+            }
         }
     }
 
@@ -68,15 +82,38 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private void removeAlarm(){
+        if(_alarmMgr != null) {
+            _alarmMgr.cancel(_alarmIntent);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         if(v == _enableButton){
-            int hour = _alarmTimePicker.getCurrentHour(); //TODO: WTF? getHour() require API23 and getCurrentHour() in deprecated!!!
-            int minute = _alarmTimePicker.getCurrentMinute();
-            _alarmHelper.saveSetting(new AlarmSetting(hour, minute, _repeatCB.isChecked(), true));
+            isEnable = !isEnable;
+            setState();
+        }
+    }
 
-            Toast.makeText(this, "Set alarm at "+hour+":" +minute, Toast.LENGTH_LONG).show();
+    public void setState(){
+        int hour = _alarmTimePicker.getCurrentHour(); //TODO: deprecated!!!
+        int minute = _alarmTimePicker.getCurrentMinute();
+        _alarmHelper.saveSetting(new AlarmSetting(hour, minute, _repeatCB.isChecked(), isEnable));
+
+        if(isEnable) {
+            //TODO: deprecated
+            _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
+            _enableButton.setText("TURN OFF ALARM");
+
+            Toast.makeText(this, "Set alarm at " + hour + ":" + minute, Toast.LENGTH_LONG).show();
             setAlarm(hour, minute, _repeatCB.isChecked());
         }
+        else {
+            _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
+            _enableButton.setText("TURN ON ALARM");
+            removeAlarm();
+        }
+
     }
 }

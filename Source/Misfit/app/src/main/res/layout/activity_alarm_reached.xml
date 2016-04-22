@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.example.luongt.misfit.AlarmReachedActivity">
 
     <TextView
@@ -27,45 +27,27 @@
         android:format24Hour="k:mm"
         android:layout_below="@+id/textview"/>
 
-    <TextView
-        android:id="@+id/single"
-        android:text="Single press to snooze alarm"
-        android:textColor="#ffffff"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textClock"/>
-
-    <TextView
-        android:id="@+id/doublePress"
-        android:text="Double press to dismiss alarm"
-        android:textColor="#ffffff"
-        android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/single"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textClock"
-        android:layout_marginTop="140dp">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp">
 
         <Button
             android:id="@+id/snoozeButton"
-            android:text="zZ"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"/>
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/snooze"/>
 
         <Button
             android:id="@+id/dismissButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="X"
+            android:layout_width="100dp"
+            android:layout_height="200dp"
             android:layout_alignTop="@+id/snoozeButton"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/dismiss"/>
     </RelativeLayout>
 </RelativeLayout>
