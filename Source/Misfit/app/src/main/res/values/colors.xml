@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#efefef</color>
-    <color name="colorPrimaryDark">#2D3138</color>
+    <color name="colorPrimaryDark">#3B484E</color>
     <color name="textColor">#fafafa</color>
     <color name="textColorDark">#373737</color>
     <color name="itemColor">#f7f7f7</color>
-    <color name="enableColor">#e87e04</color>
+
+    <color name="enableColor">#EA8465</color>
+    <color name="disableColor">#3B484E</color>
 </resources>

@@ -11,4 +11,6 @@ public class MFContants {
 
     public static final String ADD_PAYMENT_SP = "ADD_PAYMENT_SP";
     public static final String ADD_PAYMENT_DP = "ADD_PAYMENT_DP";
+
+    public static final String PIN_UNLOCK = "1235";
 }

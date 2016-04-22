@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -27,7 +27,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private PassCode _passcode;
 
     private TextView _textView;
-    private EditText _passcodeEditText;
+    private TextView _passcodeEditText;
 
     private WindowManager _manager;
 
@@ -73,7 +73,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
         _textView = (TextView) _frameLayout.findViewById(R.id.textView);
 
-        _passcodeEditText = (EditText) _frameLayout.findViewById(R.id.passcodeEditText);
+        _passcodeEditText = (TextView) _frameLayout.findViewById(R.id.passcodeEditText);
     }
 
     public void showWhenLocked(){
@@ -118,58 +118,36 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
     }
 
-    public void on1Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText() + "1");
-    }
-
-    public void on2Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"2");
-    }
-
-    public void on3Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"3");
-    }
-
-    public void on4Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"4");
-    }
-
-    public void on5Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"5");
-    }
-
-    public void on6Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"6");
-    }
-
-    public void on7Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"7");
-    }
-
-    public void on8Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"8");
-    }
-
-    public void on9Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"9");
-    }
-
-    public void on0Click(View v) {
-        _passcodeEditText.setText(_passcodeEditText.getText()+"0");
+    public void onNumberClick(View v) {
+        if(_passcodeEditText.getText().toString().length() < 4) {
+            _passcodeEditText.setText(_passcodeEditText.getText() + ((Button) v).getText().toString());
+        }
+        if(_passcodeEditText.getText().toString().length() == 4){
+            onOKClick(v);
+        }
     }
 
     public void onBackClick(View v) {
-        int n = _passcodeEditText.getText().length();
+        String passcode = _passcodeEditText.getText().toString();
+        int n = passcode.length();
         if(_passcodeEditText.length() > 0) {
-            _passcodeEditText.setText(_passcodeEditText.getText().replace(n - 1, n, ""));
+            _passcodeEditText.setText(passcode.substring(0, n-1));
         }
     }
 
     public void onOKClick(View v) {
-        if(_passcodeEditText.getText().toString().equals("1235")){
+        if(_passcodeEditText.getText().toString().equals(MFContants.PIN_UNLOCK)){
             Unlock();
         }
-        //TODO: PIN is not correct
+        else{
+            _textView.setText("PIN is incorrect");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    _passcodeEditText.setText("");
+                }
+            }, 100);
+        }
     }
 
     public void Unlock(){
