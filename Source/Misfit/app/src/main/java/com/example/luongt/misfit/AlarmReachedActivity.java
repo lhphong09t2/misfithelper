@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.luongt.misfit.misfithelper.AlarmHelper;
+import com.example.luongt.misfit.model.setting.AlarmSetting;
 import com.example.luongt.misfit.receiver.AlarmReceiver;
 import com.example.luongt.misfit.receiver.LockReceiver;
 
@@ -22,12 +23,12 @@ import java.util.Calendar;
 
 public class AlarmReachedActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button snoozeButton;
-    private Button dismissButton;
+    private Button _snoozeButton;
+    private Button _dismissButton;
 
-    AlarmHelper alarmHelper;
+    private AlarmHelper _alarmHelper;
 
-    int timeSnooze = 1;
+    private int _timeSnooze = 1;
 
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
@@ -49,12 +50,12 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        snoozeButton =(Button)findViewById(R.id.snoozeButton);
-        snoozeButton.setOnClickListener(this);
-        dismissButton = (Button)findViewById(R.id.dismissButton);
-        dismissButton.setOnClickListener(this);
+        _snoozeButton =(Button)findViewById(R.id.snoozeButton);
+        _snoozeButton.setOnClickListener(this);
+        _dismissButton = (Button)findViewById(R.id.dismissButton);
+        _dismissButton.setOnClickListener(this);
 
-        snoozeButton.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BRIGHTNESS_DOWN));
+        _snoozeButton.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BRIGHTNESS_DOWN));
 
         _localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter mIntentFilter = new IntentFilter(MFContants.DISMISS);
@@ -63,9 +64,9 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
 
         AlarmHelper.isAlarming = true;
 
-        alarmHelper = new AlarmHelper(this);
+        _alarmHelper = new AlarmHelper(this);
 
-        alarmHelper.playAudio(R.raw.cuckoo);
+        _alarmHelper.playAudio(R.raw.cuckoo);
     }
 
     @Override
@@ -73,18 +74,27 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
         super.onDestroy();
         _localBroadcastManager.unregisterReceiver(_broadcastReceiver);
         AlarmHelper.isAlarming = false;
-        alarmHelper.stopAudio();
+        _alarmHelper.stopAudio();
         if(LockReceiver.isScreenOn) {
             startActivity(new Intent(this, LockActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
+        _alarmHelper.resetVolume();
     }
 
     @Override
     public void onClick(View v) {
-        if(v == snoozeButton){
+        if(v == _snoozeButton){
             Snooze();
         }
-        if(v == dismissButton){
+        if(v == _dismissButton){
+            AlarmSetting _alarmSetting = _alarmHelper.getSetting();
+            if(!_alarmSetting.isRepeat()){
+                _alarmSetting.isEnable(false);
+                _alarmHelper.saveSetting(_alarmSetting);
+                if(AlarmActivity.getInstance() != null){
+                    AlarmActivity.getInstance().setState(false);
+                }
+            }
             this.finish();
         }
     }
@@ -92,7 +102,7 @@ public class AlarmReachedActivity extends AppCompatActivity implements View.OnCl
     public void Snooze(){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, timeSnooze);
+        calendar.add(Calendar.MINUTE, _timeSnooze);
 
         AlarmManager alarmManager = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);

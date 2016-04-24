@@ -1,5 +1,7 @@
 package com.example.luongt.misfit.misfithelper;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -10,6 +12,7 @@ import android.util.Log;
 import com.example.luongt.misfit.MFContants;
 import com.example.luongt.misfit.R;
 import com.example.luongt.misfit.model.setting.AlarmSetting;
+import com.example.luongt.misfit.receiver.AlarmReceiver;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,9 +30,14 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
 
     public static boolean isAlarming = false;
 
+    private int currentVolume;
+
     public AlarmHelper(Context context) {
         super(context);
         _context = context;
+
+        audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -86,18 +94,8 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
     }
 
     @Override
-    public String getSinglePressTitle() {
-        return "Snooze";
-    }
-
-    @Override
     public void onSinglePress() {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(MFContants.SNOOZE));
-    }
-
-    @Override
-    public String getDoublePressTitle() {
-        return "Dismiss";
     }
 
     @Override
@@ -105,14 +103,14 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(MFContants.DISMISS));
     }
 
-    static MediaPlayer _mediaPlayer;
+    AudioManager audioManager;
     @Override
     public void onTripplePress() {
-        AudioManager audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_VIBRATE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
         playAudio(R.raw.terible_song);
     }
 
+    static MediaPlayer _mediaPlayer;
     public void playAudio(int id){
         if(_mediaPlayer !=null){
             _mediaPlayer.stop();
@@ -124,5 +122,36 @@ public class AlarmHelper extends BaseMisfitHelper<AlarmSetting> {
 
     public void stopAudio(){
         _mediaPlayer.stop();
+    }
+
+    private AlarmManager _alarmMgr;
+    private PendingIntent _alarmIntent;
+    public void setAlarm(int hour, int minute, Boolean repeat){
+        _alarmMgr = (AlarmManager)_context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(_context, AlarmReceiver.class);
+        _alarmIntent = PendingIntent.getBroadcast(_context, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        if(repeat){
+            _alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, _alarmIntent);
+        }
+        else {
+            _alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), _alarmIntent);
+        }
+    }
+
+    public void removeAlarm(){
+        if(_alarmMgr != null) {
+            _alarmMgr.cancel(_alarmIntent);
+        }
+    }
+
+    public void resetVolume(){
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0);
     }
 }

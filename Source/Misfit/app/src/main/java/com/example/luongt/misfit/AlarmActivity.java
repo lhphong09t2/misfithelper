@@ -1,9 +1,7 @@
 package com.example.luongt.misfit;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,15 +12,10 @@ import android.widget.Toast;
 
 import com.example.luongt.misfit.misfithelper.AlarmHelper;
 import com.example.luongt.misfit.model.setting.AlarmSetting;
-import com.example.luongt.misfit.receiver.AlarmReceiver;
 import com.example.luongt.misfit.service.HelloService;
-
-import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity implements View.OnClickListener
 {
-    private AlarmManager _alarmMgr;
-    private PendingIntent _alarmIntent;
     private AlarmHelper _alarmHelper;
     private AlarmSetting _alarmSetting;
 
@@ -30,12 +23,20 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
     private CheckBox _repeatCB;
     private TimePicker _alarmTimePicker;
 
-    private boolean isEnable;
+    private static AlarmActivity alarmActivity;
+    public static AlarmActivity getInstance(){
+        return alarmActivity;
+    }
 
+    private boolean _isEnable;
+
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        alarmActivity = this;
 
         _enableButton = (Button)findViewById(R.id.enableButton);
         _enableButton.setOnClickListener(this);
@@ -47,73 +48,71 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         _alarmHelper = HelloService.getInstance().getAlarmHelper();
         if(_alarmHelper != null){
             _alarmSetting = _alarmHelper.getSetting();
-            _alarmTimePicker.setCurrentHour(_alarmSetting.getHour());
-            _alarmTimePicker.setCurrentMinute(_alarmSetting.getMinute());
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                _alarmTimePicker.setHour(_alarmSetting.getHour());
+                _alarmTimePicker.setMinute(_alarmSetting.getMinute());
+            }else {
+                _alarmTimePicker.setCurrentHour(_alarmSetting.getHour());
+                _alarmTimePicker.setCurrentMinute(_alarmSetting.getMinute());
+            }
             _repeatCB.setChecked(_alarmSetting.isRepeat());
-            isEnable = _alarmSetting.isEnable();
-            if(isEnable) {
-                //TODO: deprecated
-                _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
-                _enableButton.setText("TURN OFF ALARM");
-            }
-            else {
-                _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
-                _enableButton.setText("TURN ON ALARM");
-            }
-        }
-    }
-
-    private void setAlarm(int hour, int minute, Boolean repeat){
-        _alarmMgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        _alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-
-        if(repeat){
-            _alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, _alarmIntent);
-        }
-        else {
-            _alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), _alarmIntent);
-        }
-    }
-
-    private void removeAlarm(){
-        if(_alarmMgr != null) {
-            _alarmMgr.cancel(_alarmIntent);
+            _isEnable = _alarmSetting.isEnable();
+            setEnableButton();
         }
     }
 
     @Override
     public void onClick(View v) {
         if(v == _enableButton){
-            isEnable = !isEnable;
-            setState();
+            _isEnable = !_isEnable;
+            setState(_isEnable);
         }
     }
 
-    public void setState(){
-        int hour = _alarmTimePicker.getCurrentHour(); //TODO: deprecated!!!
-        int minute = _alarmTimePicker.getCurrentMinute();
-        _alarmHelper.saveSetting(new AlarmSetting(hour, minute, _repeatCB.isChecked(), isEnable));
+    @SuppressWarnings("deprecation")
+    public void setState(boolean isEnable){
+        _isEnable = isEnable;
+        int hour;
+        int minute;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            hour = _alarmTimePicker.getHour();
+            minute = _alarmTimePicker.getMinute();
+        }
+        else{
+            hour = _alarmTimePicker.getCurrentHour();
+            minute = _alarmTimePicker.getCurrentMinute();
+        }
+        _alarmHelper.saveSetting(new AlarmSetting(hour, minute, _repeatCB.isChecked(), _isEnable));
 
-        if(isEnable) {
-            //TODO: deprecated
-            _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
-            _enableButton.setText("TURN OFF ALARM");
-
+        setEnableButton();
+        if(_isEnable) {
             Toast.makeText(this, "Set alarm at " + hour + ":" + minute, Toast.LENGTH_LONG).show();
-            setAlarm(hour, minute, _repeatCB.isChecked());
+            _alarmHelper.setAlarm(hour, minute, _repeatCB.isChecked());
         }
         else {
-            _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
-            _enableButton.setText("TURN ON ALARM");
-            removeAlarm();
+            _alarmHelper.removeAlarm();
         }
+    }
 
+    @SuppressWarnings("deprecation")
+    public void setEnableButton(){
+        if(_isEnable) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                _enableButton.setTextColor(getResources().getColor(R.color.disableColor, null));
+            }
+            else {
+                _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
+            }
+            _enableButton.setText("TURN OFF ALARM");
+        }
+        else {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                _enableButton.setTextColor(getResources().getColor(R.color.enableColor, null));
+            }
+            else {
+                _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
+            }
+            _enableButton.setText("TURN ON ALARM");
+        }
     }
 }
