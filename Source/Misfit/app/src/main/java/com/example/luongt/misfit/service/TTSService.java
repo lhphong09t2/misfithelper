@@ -1,6 +1,5 @@
 package com.example.luongt.misfit.service;
 
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
@@ -28,22 +27,12 @@ public abstract class TTSService extends Service {
         });
     }
 
+    @SuppressWarnings("deprecation")
     protected void speak(String text){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ttsGreater21(text);
+            _textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         } else {
-            ttsUnder20(text);
+            _textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
-
-    @SuppressWarnings("deprecation")
-    private void ttsUnder20(String text) {
-        _textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void ttsGreater21(String text) {
-        _textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-    }
-
 }

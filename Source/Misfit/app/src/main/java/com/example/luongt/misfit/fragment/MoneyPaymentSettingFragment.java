@@ -18,7 +18,7 @@ import com.example.luongt.misfit.model.setting.MoneySetting;
 /**
  * Created by luongt on 4/20/2016.
  */
-public class MoneyPaymentSettingFragment extends BaseFragment implements View.OnClickListener, TextView.OnEditorActionListener{
+public class MoneyPaymentSettingFragment extends BaseFragment implements View.OnClickListener, TextView.OnEditorActionListener {
     private View _view;
     private Context _context;
     private MoneySetting _moneySetting;
@@ -38,36 +38,36 @@ public class MoneyPaymentSettingFragment extends BaseFragment implements View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         _view = inflater.inflate(R.layout.fragment_money_setting, container, false);
         _context = _view.getContext();
-        _moneyStatisticHelper = new MoneyStatisticHelper(_view.getContext());
+        _moneyStatisticHelper = new MoneyStatisticHelper(_context);
 
-        _moneySetting = (MoneySetting)_moneyStatisticHelper.getSetting();
+        _moneySetting = (MoneySetting) _moneyStatisticHelper.getSetting();
 
         initView();
 
         return _view;
     }
 
-    private void initView(){
-        _singleButton = (ImageButton)_view.findViewById(R.id.singleButton);
-        _doubleButton = (ImageButton)_view.findViewById(R.id.doubleButton);
-        _tripleButton = (ImageButton)_view.findViewById(R.id.tripleButton);
-        _longButton = (ImageButton)_view.findViewById(R.id.longButton);
+    private void initView() {
+        _singleButton = (ImageButton) _view.findViewById(R.id.singleButton);
+        _doubleButton = (ImageButton) _view.findViewById(R.id.doubleButton);
+        _tripleButton = (ImageButton) _view.findViewById(R.id.tripleButton);
+        _longButton = (ImageButton) _view.findViewById(R.id.longButton);
 
         _singleButton.setOnClickListener(this);
         _doubleButton.setOnClickListener(this);
         _tripleButton.setOnClickListener(this);
         _longButton.setOnClickListener(this);
 
-        _moneyEditText = (EditText)_view.findViewById(R.id.moneyEditText);
+        _moneyEditText = (EditText) _view.findViewById(R.id.moneyEditText);
         _moneyEditText.setText((int) _moneySetting.getSPMoney() + "");
         _moneyEditText.setOnEditorActionListener(this);
 
         _pressStateTV = (TextView) _view.findViewById(R.id.pressStateTV);
     }
 
-    private void changeSetting(double money){
-        _moneySetting = (MoneySetting)_moneyStatisticHelper.getSetting();
-        switch(buttonMode){
+    private void changeSetting(double money) {
+        _moneySetting = (MoneySetting) _moneyStatisticHelper.getSetting();
+        switch (buttonMode) {
             case 0:
                 _moneySetting.setSPMoney(money);
                 break;
@@ -82,27 +82,28 @@ public class MoneyPaymentSettingFragment extends BaseFragment implements View.On
     }
 
     int buttonMode;
+
     @Override
     public void onClick(View v) {
-        if(v == _singleButton){
+        if (v == _singleButton) {
             buttonMode = 0;
             _moneyEditText.setText((int) _moneySetting.getSPMoney() + "");
             _pressStateTV.setText("Single press");
             //TODO:animation abc xyz
         }
-        if(v == _doubleButton){
+        if (v == _doubleButton) {
             buttonMode = 1;
-            _moneyEditText.setText((int)_moneySetting.getDPMoney()+"");
+            _moneyEditText.setText((int) _moneySetting.getDPMoney() + "");
             _pressStateTV.setText("Double press");
             //TODO:animation abc xyz
         }
-        if(v == _tripleButton){
+        if (v == _tripleButton) {
             buttonMode = 2;
-            _moneyEditText.setText((int)_moneySetting.getTPMoney()+"");
+            _moneyEditText.setText((int) _moneySetting.getTPMoney() + "");
             _pressStateTV.setText("Triple press");
             //TODO:animation abc xyz
         }
-        if(v == _longButton){
+        if (v == _longButton) {
             _moneyEditText.setText("x10");
             _pressStateTV.setText("Long press");
             //TODO:animation abc xyz

@@ -85,16 +85,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void run() {
                             switch (MFControl.getName()) {
                                 case "Alarm":
-                                    startActivity(new Intent(MainActivity.this, AlarmActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    startActivity(new Intent(MainActivity.this, AlarmActivity.class));
                                     break;
                                 case "Call":
-                                    //TODO open setting view
+                                    startActivity(new Intent(MainActivity.this, CallSettingActivity.class));
                                     break;
                                 case "Lock":
                                     //TODO open setting view
                                     break;
                                 case "Money":
-                                    startActivity(new Intent(MainActivity.this, MoneyActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                    startActivity(new Intent(MainActivity.this, MoneyActivity.class));
                                     break;
                                 case "Slide":
                                     //TODO open setting view

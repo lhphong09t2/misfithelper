@@ -1,6 +1,5 @@
 package com.example.luongt.misfit;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -94,25 +93,24 @@ public class AlarmActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    @SuppressWarnings("deprecation")
     public void setEnableButton(){
         if(_isEnable) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                _enableButton.setTextColor(getResources().getColor(R.color.disableColor, null));
-            }
-            else {
-                _enableButton.setTextColor(getResources().getColor(R.color.disableColor));
-            }
+            setTextColor(R.color.disableColor);
             _enableButton.setText("TURN OFF ALARM");
         }
         else {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                _enableButton.setTextColor(getResources().getColor(R.color.enableColor, null));
-            }
-            else {
-                _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
-            }
+            setTextColor(R.color.enableColor);
             _enableButton.setText("TURN ON ALARM");
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setTextColor(int id){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            _enableButton.setTextColor(getResources().getColor(R.color.enableColor, null));
+        }
+        else {
+            _enableButton.setTextColor(getResources().getColor(R.color.enableColor));
         }
     }
 }
