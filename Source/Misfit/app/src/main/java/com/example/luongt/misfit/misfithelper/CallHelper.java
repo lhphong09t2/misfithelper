@@ -39,8 +39,23 @@ public class CallHelper extends BaseMisfitHelper {
     }
 
     @Override
+    public String getSinglePressTitle() {
+        return "Turn off ringtone";
+    }
+
+    @Override
+    public String getDoublePressTitle() {
+        return "End call";
+    }
+
+    @Override
+    public String getTriplePressTitle() {
+        return "Send a message";
+    }
+
+    @Override
     public void onTripplePress() {
-        sendMessage("I'm busy");
+        sendMessage(((CallSetting)getSetting()).getMessage());
     }
 
     @Override

@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".LockActivity"
             android:launchMode="singleInstance"
@@ -65,8 +65,10 @@
         <service android:name=".service.HelloService" />
         <service android:name=".service.LockService" />
 
-        <activity android:name=".MoneyActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".MoneyActivity" />
+        <activity android:name=".CallSettingActivity"
+            android:windowSoftInputMode="adjustResize"></activity>
     </application>
 
 </manifest>
