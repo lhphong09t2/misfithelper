@@ -7,20 +7,11 @@
     android:background="@color/colorPrimaryDark"
     tools:context="com.example.luongt.misfit.ControlSlideActivity">
 
-    <Switch
-        android:id="@+id/enableSlideButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Enable slide "
-        android:textColor="@color/textColor"/>
-
     <ListView
         android:id="@+id/serverListView"
         android:choiceMode="singleChoice"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/enableSlideButton"
         android:layout_above="@+id/controlArea">
     </ListView>
 

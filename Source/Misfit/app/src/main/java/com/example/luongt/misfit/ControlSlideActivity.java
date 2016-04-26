@@ -1,7 +1,6 @@
 package com.example.luongt.misfit;
 
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,10 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
 
 import com.example.luongt.misfit.adapter.ServerAdapter;
 import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
+import com.example.luongt.misfit.service.HelloService;
 import com.onballgroup.cominlan.client.ComInLanClient;
 import com.onballgroup.cominlan.client.OnBroadcastClientListener;
 import com.onballgroup.cominlan.model.CServer;
@@ -23,13 +22,11 @@ import com.onballgroup.cominlan.model.ServerState;
 
 import java.util.List;
 
-public class ControlSlideActivity extends AppCompatActivity implements OnBroadcastClientListener, AdapterView.OnItemClickListener, View.OnClickListener{
+public class ControlSlideActivity extends AppCompatActivity implements OnBroadcastClientListener, AdapterView.OnItemClickListener, View.OnClickListener {
     private ListView _serverListView;
     private ServerAdapter _arrayAdapter;
 
     private ControlSlideHelper _controlSlideHelper;
-
-    private Switch _enableSlideButton;
 
     private Dialog _dialog;
     private Button _cancelButton;
@@ -42,22 +39,28 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
     private Button _nextSlideButton;
 
     private ComInLanClient _comInLanClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_slide);
 
-        _controlSlideHelper = new ControlSlideHelper(this);
+        _controlSlideHelper = HelloService.getInstance().getControlSlideHelper();
 
-        _comInLanClient = new ComInLanClient(this, Build.MODEL);
+        _comInLanClient = _controlSlideHelper.getComInLanClient();
         _comInLanClient.setOnComInClientListener(this);
 
         initView();
     }
 
-    private void initView(){
-        _enableSlideButton = (Switch) findViewById(R.id.enableSlideButton);
-        _enableSlideButton.setOnClickListener(this);
+    @Override
+    protected void onDestroy() {
+        _comInLanClient.setOnComInClientListener(null);
+        _controlSlideHelper.getServer().setOnServerListener(null);
+        super.onDestroy();
+    }
+
+    private void initView() {
 
         _dialog = new Dialog(this);
         _dialog.setContentView(R.layout.dialog_passcode_slide);
@@ -87,23 +90,38 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
     }
 
     @Override
-    public void onServerChanged(IServer iServer) {
-        _arrayAdapter.notifyDataSetChanged();
-        if (iServer.getState() == ServerState.None) {
-            _controlArea.setVisibility(View.GONE);
-        }
+    public void onServerChanged(final IServer iServer) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _arrayAdapter.notifyDataSetChanged();
+                if (iServer.getState() == ServerState.None) {
+                    _controlArea.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
-    public void onServerRemoved(IServer iServer) {
-        if (iServer.getState() == ServerState.None) {
-            _controlArea.setVisibility(View.GONE);
-        }
+    public void onServerRemoved(final IServer iServer) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (iServer.getState() == ServerState.None) {
+                    _controlArea.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
     public void onServersChanged(List<IServer> list) {
-        _arrayAdapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _arrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -113,23 +131,28 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         if (server.getState() == ServerState.None) {
             server.setOnServerListener(new OnServerListener() {
                 @Override
-                public void onStateChanged(IServer server) {
-                    _arrayAdapter.notifyDataSetChanged();
+                public void onStateChanged(final IServer server) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            _arrayAdapter.notifyDataSetChanged();
 
-                    int checkedItemPosition = _serverListView.getCheckedItemPosition();
+                            int checkedItemPosition = _serverListView.getCheckedItemPosition();
 
-                    if (checkedItemPosition < 0) {
-                        return;
-                    }
+                            if (checkedItemPosition < 0) {
+                                return;
+                            }
 
-                    if (server.getState() == ServerState.PasscodeRequested) {
-                        _dialog.show();
-                    }
+                            if (server.getState() == ServerState.PasscodeRequested) {
+                                _dialog.show();
+                            }
 
-                    if (server.getState() == ServerState.Connected) {
-                        _controlSlideHelper.setServer(server);
-                        _controlArea.setVisibility(View.VISIBLE);
-                    }
+                            if (server.getState() == ServerState.Connected) {
+                                _controlSlideHelper.setServer(server);
+                                _controlArea.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
                 }
 
                 @Override
@@ -144,25 +167,17 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
 
     @Override
     public void onClick(View v) {
-        if(v == _enableSlideButton){
-            if(_enableSlideButton.isChecked()){
-                _comInLanClient.start();
-            }
-            else {
-                _comInLanClient.stop();
-            }
-        }
-        if(v == _cancelButton){
+        if (v == _cancelButton) {
             _dialog.dismiss();
         }
-        if(v == _okButton){
+        if (v == _okButton) {
             int checkedItemPosition = _serverListView.getCheckedItemPosition();
 
             if (checkedItemPosition < 0) {
                 return;
             }
 
-            CServer checkedServer = (CServer)_serverListView.getItemAtPosition(checkedItemPosition);
+            CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
 
             if (checkedServer != null) {
                 _comInLanClient.sendPasscode(checkedServer, _passcodeSlideET.getText().toString());
@@ -170,26 +185,16 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
             _dialog.dismiss();
         }
 
-        if(v == _backSlideButton){
+        if (v == _backSlideButton) {
             _controlSlideHelper.sendData("b");
         }
-        if(v == _refreshSlideButton){
+        if (v == _refreshSlideButton) {
             _controlSlideHelper.sendData("f");
         }
-        if(v == _nextSlideButton){
+        if (v == _nextSlideButton) {
             _controlSlideHelper.sendData("n");
         }
     }
 
-    public void sendData(String data){
-        int checkedItemPosition = _serverListView.getCheckedItemPosition();
 
-        if (checkedItemPosition < 0) {
-            return;
-        }
-
-        IServer checkedServer = (IServer) _serverListView.getItemAtPosition(checkedItemPosition);
-
-        _comInLanClient.sendData(checkedServer,data);
-    }
 }

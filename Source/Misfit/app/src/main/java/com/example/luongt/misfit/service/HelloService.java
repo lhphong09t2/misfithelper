@@ -52,6 +52,24 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
         return _alarmHelper;
     }
 
+    private ControlSlideHelper _controlSlideHelper;
+
+    public ControlSlideHelper getControlSlideHelper() {
+        return _controlSlideHelper;
+    }
+
+    private MoneyStatisticHelper _moneyStatisticHelper;
+
+    public MoneyStatisticHelper get_moneyStatisticHelper() {
+        return _moneyStatisticHelper;
+    }
+
+    private LockHelper _lockHelper;
+
+    public LockHelper get_lockHelper() {
+        return _lockHelper;
+    }
+
     private String _commandMisfit;
 
     private static HelloService _instance;
@@ -206,11 +224,14 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
 
         _callHelper = new CallHelper(context);
         _alarmHelper = new AlarmHelper(context);
+        _controlSlideHelper = new ControlSlideHelper(context);
+        _lockHelper = new LockHelper(context);
+        _moneyStatisticHelper = new MoneyStatisticHelper(context);
 
         _misfitHelpers = new ArrayList<BaseMisfitHelper>();
-        _misfitHelpers.add(new MoneyStatisticHelper(context));
-        _misfitHelpers.add(new ControlSlideHelper(context));
-        _misfitHelpers.add(new LockHelper(context));
+        _misfitHelpers.add(_moneyStatisticHelper);
+        _misfitHelpers.add(_controlSlideHelper);
+        _misfitHelpers.add(_lockHelper);
         _misfitHelpers.add(_alarmHelper);
         _misfitHelpers.add(_callHelper);
 

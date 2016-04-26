@@ -1,16 +1,36 @@
 package com.example.luongt.misfit.misfithelper;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.example.luongt.misfit.R;
+import com.onballgroup.cominlan.client.ComInLanClient;
+import com.onballgroup.cominlan.model.IServer;
 
 /**
  * Created by luongt on 3/24/2016.
  */
 public class ControlSlideHelper extends BaseMisfitHelper {
 
+    private  IServer _iServer;
+    private ComInLanClient _comInLanClient;
+
+    public IServer getServer() {
+        return _iServer;
+    }
+
+    public void setServer(IServer iServer) {
+        this._iServer = iServer;
+    }
+
+    public ComInLanClient getComInLanClient() {
+        return _comInLanClient;
+    }
+
     public ControlSlideHelper(Context context) {
         super(context);
+        _comInLanClient = new ComInLanClient(null, Build.MODEL);
+        _comInLanClient.start();
     }
 
     @Override
@@ -45,7 +65,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public void onSinglePress() {
-
+        sendData("n");
     }
 
     @Override
@@ -55,7 +75,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public void onDoublePress() {
-
+        sendData("b");
     }
 
     @Override
@@ -65,11 +85,17 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public void onTripplePress() {
-
+        sendData("f");
     }
 
     @Override
     public String getTriplePressTitle() {
         return null;
+    }
+
+    public void sendData(String data){
+        if(_comInLanClient != null && _iServer != null){
+            _comInLanClient.sendData(_iServer,data);
+        }
     }
 }
