@@ -4,8 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Misfit.iml" filepath="$PROJECT_DIR$/Misfit.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/misfitlinksdk-release/misfitlinksdk-release.iml" filepath="$PROJECT_DIR$/misfitlinksdk-release/misfitlinksdk-release.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cominlan/cominlan.iml" filepath="$PROJECT_DIR$/cominlan/cominlan.iml" />
       <module fileurl="file://$PROJECT_DIR$/misfitlinksdk-release/misfitlinksdk-release.iml" filepath="$PROJECT_DIR$/misfitlinksdk-release/misfitlinksdk-release.iml" />
     </modules>
   </component>

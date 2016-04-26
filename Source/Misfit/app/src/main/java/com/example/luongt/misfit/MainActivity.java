@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     startActivity(new Intent(MainActivity.this, MoneyActivity.class));
                                     break;
                                 case "Slide":
-                                    //TODO open setting view
+                                    startActivity(new Intent(MainActivity.this, ControlSlideActivity.class));
                                     break;
                             }
 

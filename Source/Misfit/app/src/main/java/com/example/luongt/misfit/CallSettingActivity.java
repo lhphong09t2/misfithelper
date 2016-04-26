@@ -66,8 +66,6 @@ public class CallSettingActivity extends AppCompatActivity implements View.OnCli
             _pressStateTV.setText(_callHelper.getTriplePressTitle());
             //TODO:animation abc xyz
         }
-        if (v == _messageET) {
-        }
     }
 
     @Override

@@ -65,10 +65,12 @@
         <service android:name=".service.HelloService" />
         <service android:name=".service.LockService" />
 
+        <activity android:name=".MoneyActivity" />
         <activity
-            android:name=".MoneyActivity" />
-        <activity android:name=".CallSettingActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:name=".CallSettingActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".LockSettingActivity" />
+        <activity android:name=".ControlSlideActivity" />
     </application>
 
 </manifest>

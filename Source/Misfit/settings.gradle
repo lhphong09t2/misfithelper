@@ -1,1 +1,1 @@
-include ':app', ':misfitlinksdk-release'
+include ':app', ':misfitlinksdk-release', ':cominlan'

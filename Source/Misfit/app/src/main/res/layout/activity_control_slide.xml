@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.luongt.misfit.ControlSlideActivity">
+
+    <Switch
+        android:id="@+id/enableSlideButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Enable slide "
+        android:textColor="@color/textColor"/>
+
+    <ListView
+        android:id="@+id/serverListView"
+        android:choiceMode="singleChoice"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/enableSlideButton"
+        android:layout_above="@+id/controlArea">
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/controlArea"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+        <Button
+            android:id="@+id/backSlideButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Back"/>
+        <Button
+            android:id="@+id/refreshSlideButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Slide show"/>
+        <Button
+            android:id="@+id/nextSlideButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Next"/>
+    </LinearLayout>
+
+</RelativeLayout>
