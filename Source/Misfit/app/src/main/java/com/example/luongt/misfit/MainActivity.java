@@ -12,7 +12,9 @@ import android.widget.LinearLayout;
 import com.example.luongt.misfit.control.EnableButton;
 import com.example.luongt.misfit.control.MisfitHelperControl;
 import com.example.luongt.misfit.misfithelper.BaseMisfitHelper;
+import com.example.luongt.misfit.misfithelper.LockHelper;
 import com.example.luongt.misfit.model.setting.BaseSetting;
+import com.example.luongt.misfit.model.setting.LockSetting;
 import com.example.luongt.misfit.service.HelloService;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCallBack;
@@ -91,7 +93,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     startActivity(new Intent(MainActivity.this, CallSettingActivity.class));
                                     break;
                                 case "Lock":
-                                    //TODO open setting view
+                                    LockHelper lockHelper = HelloService.getInstance().getLockHelper();
+                                    if (((LockSetting) lockHelper.getSetting()).getPasscode().equals(lockHelper.getPasscode())) {
+                                        startActivity(new Intent(MainActivity.this, LockSettingActivity.class));
+                                    } else {
+                                        startActivity(new Intent(MainActivity.this, LockConfirmPinActivity.class));
+                                    }
                                     break;
                                 case "Money":
                                     startActivity(new Intent(MainActivity.this, MoneyActivity.class));
@@ -116,8 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.linearLayout1);
-        LinearLayout linearLayout2 = (LinearLayout)findViewById(R.id.linearLayout2);
+        LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
+        LinearLayout linearLayout2 = (LinearLayout) findViewById(R.id.linearLayout2);
 
         _enableButton = new EnableButton(this, MFLSession.sharedInstance().isEnabled());
         _enableButton.setOnClickListener(this);
@@ -138,16 +145,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             inAnimation.setStartOffset(1500 - i * 300);
             MFControl.startAnimation(inAnimation);
 
-            if(i > misfitHelpers.size()/2-1){
+            if (i > misfitHelpers.size() / 2 - 1) {
                 linearLayout2.addView(MFControl);
-            }
-            else {
+            } else {
                 linearLayout1.addView(MFControl);
             }
         }
     }
 
-    private MisfitHelperControl createMFControl(BaseMisfitHelper<BaseSetting> misfitHelper){
+    private MisfitHelperControl createMFControl(BaseMisfitHelper<BaseSetting> misfitHelper) {
         MisfitHelperControl MFControl = new MisfitHelperControl(this);
         MFControl.setOnClickListener(this);
         MFControl.setIconId(misfitHelper.getIconId());

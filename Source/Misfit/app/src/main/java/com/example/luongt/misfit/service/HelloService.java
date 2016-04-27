@@ -16,6 +16,7 @@ import com.example.luongt.misfit.misfithelper.CallHelper;
 import com.example.luongt.misfit.misfithelper.ControlSlideHelper;
 import com.example.luongt.misfit.misfithelper.LockHelper;
 import com.example.luongt.misfit.misfithelper.MoneyStatisticHelper;
+import com.example.luongt.misfit.model.setting.LockSetting;
 import com.misfit.misfitlinksdk.MFLSession;
 import com.misfit.misfitlinksdk.publish.MFLCommand;
 import com.misfit.misfitlinksdk.publish.MFLDeviceState;
@@ -66,7 +67,7 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
 
     private LockHelper _lockHelper;
 
-    public LockHelper get_lockHelper() {
+    public LockHelper getLockHelper() {
         return _lockHelper;
     }
 
@@ -92,8 +93,11 @@ public class HelloService extends TTSService implements MFLGestureCommandDelegat
             MFLSession.sharedInstance().setStateTrackingDelegate(this);
         }
 
-        startService(new Intent(this, LockService.class));
         InitHelpers();
+
+        if(((LockSetting)_lockHelper.getSetting()).isEnable()) {
+            startService(new Intent(this, LockService.class));
+        }
     }
 
     @Nullable

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.luongt.misfit.LockSettingActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginBottom="@dimen/space"
+            android:background="@drawable/item_background">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_margin"
+                android:text="Enable lock screen"
+                android:textSize="@dimen/small_text"
+                android:textColor="@color/textColor"/>
+
+            <Switch
+                android:id="@+id/enableButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingRight="@dimen/activity_margin"
+                android:onClick="enableButtonClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:layout_marginBottom="@dimen/space"
+            android:background="@drawable/item_background"
+            android:onClick="changePassButtonClick">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_margin"
+                android:text="Change passcode"
+                android:textSize="@dimen/small_text"
+                android:textColor="@color/textColor" />
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

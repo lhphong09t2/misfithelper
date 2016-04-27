@@ -56,7 +56,9 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
     @Override
     protected void onDestroy() {
         _comInLanClient.setOnComInClientListener(null);
-        _controlSlideHelper.getServer().setOnServerListener(null);
+        if(_controlSlideHelper.getServer() != null) {
+            _controlSlideHelper.getServer().setOnServerListener(null);
+        }
         super.onDestroy();
     }
 
@@ -82,6 +84,11 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         _arrayAdapter = new ServerAdapter(this, 0, _comInLanClient.getServers());
         _serverListView.setAdapter(_arrayAdapter);
         _serverListView.setOnItemClickListener(this);
+
+        if (_controlSlideHelper.getServer() != null)
+        {
+            _controlArea.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -107,9 +114,8 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (iServer.getState() == ServerState.None) {
-                    _controlArea.setVisibility(View.GONE);
-                }
+                _controlSlideHelper.setServer(null);
+                _controlArea.setVisibility(View.GONE);
             }
         });
     }
@@ -126,8 +132,24 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        int checkedItemPosition = _serverListView.getCheckedItemPosition();
+
+        if (checkedItemPosition == position) {
+            IServer checkedServer = _arrayAdapter.getItem(checkedItemPosition);
+            if(checkedServer.getState() == ServerState.Connected){
+                return;
+            }
+        } else {
+            IServer checkedServer = _arrayAdapter.getItem(checkedItemPosition);
+            checkedServer.setOnServerListener(null);
+            _comInLanClient.disconnect(checkedServer);
+            _controlArea.setVisibility(View.INVISIBLE);
+            _controlSlideHelper.setServer(null);
+        }
+
         _serverListView.setItemChecked(position, true);
         IServer server = _arrayAdapter.getItem(position);
+
         if (server.getState() == ServerState.None) {
             server.setOnServerListener(new OnServerListener() {
                 @Override
@@ -167,21 +189,14 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
 
     @Override
     public void onClick(View v) {
+
         if (v == _cancelButton) {
             _dialog.dismiss();
+            disconnect();
         }
+
         if (v == _okButton) {
-            int checkedItemPosition = _serverListView.getCheckedItemPosition();
-
-            if (checkedItemPosition < 0) {
-                return;
-            }
-
-            CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
-
-            if (checkedServer != null) {
-                _comInLanClient.sendPasscode(checkedServer, _passcodeSlideET.getText().toString());
-            }
+            sendPasscode();
             _dialog.dismiss();
         }
 
@@ -196,5 +211,35 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         }
     }
 
+    private void sendPasscode() {
+        int checkedItemPosition = _serverListView.getCheckedItemPosition();
+        if (checkedItemPosition < 0) {
+            return;
+        }
+        try {
+            CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
+            if (checkedServer != null) {
+                _comInLanClient.sendPasscode(checkedServer, _passcodeSlideET.getText().toString());
+            }
+        }
+        catch (IndexOutOfBoundsException e){
+            return;
+        }
+    }
 
+    private void disconnect() {
+        int checkedItemPosition = _serverListView.getCheckedItemPosition();
+        if (checkedItemPosition < 0) {
+            return;
+        }
+        try {
+            CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
+            if (checkedServer != null) {
+                _comInLanClient.disconnect(checkedServer);
+            }
+        }
+        catch (IndexOutOfBoundsException e){
+            return;
+        }
+    }
 }

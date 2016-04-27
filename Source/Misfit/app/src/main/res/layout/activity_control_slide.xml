@@ -18,14 +18,14 @@
     <LinearLayout
         android:id="@+id/controlArea"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:visibility="gone">
         <Button
             android:id="@+id/backSlideButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="Back"/>
         <Button
             android:id="@+id/refreshSlideButton"

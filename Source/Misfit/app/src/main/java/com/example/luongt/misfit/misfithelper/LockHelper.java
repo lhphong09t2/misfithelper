@@ -13,7 +13,12 @@ import org.json.JSONObject;
  */
 public class LockHelper extends BaseMisfitHelper {
 
-    private String _passcode = "1235";
+    private String _passcode = "0000";
+    private boolean isEnable = true;
+
+    public String getPasscode() {
+        return _passcode;
+    }
 
     public LockHelper(Context context) {
         super(context);
@@ -21,7 +26,7 @@ public class LockHelper extends BaseMisfitHelper {
 
     @Override
     Object createDefaultSetting() {
-        return new LockSetting(_passcode);
+        return new LockSetting(_passcode, isEnable);
     }
 
     @Override
@@ -40,6 +45,7 @@ public class LockHelper extends BaseMisfitHelper {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("passcode", lockSetting.getPasscode());
+            jsonObject.put("isEnable", lockSetting.isEnable());
             return jsonObject.toString();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -51,7 +57,7 @@ public class LockHelper extends BaseMisfitHelper {
     Object parseJsonSetting(String settingJson) {
         try {
             JSONObject jsonObject = new JSONObject(settingJson);
-            return new LockSetting(jsonObject.getString("passcode"));
+            return new LockSetting(jsonObject.getString("passcode"), jsonObject.getBoolean("isEnable"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
