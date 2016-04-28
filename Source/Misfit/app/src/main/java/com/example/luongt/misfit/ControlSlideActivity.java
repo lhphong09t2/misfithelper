@@ -56,7 +56,7 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
     @Override
     protected void onDestroy() {
         _comInLanClient.setOnComInClientListener(null);
-        if(_controlSlideHelper.getServer() != null) {
+        if (_controlSlideHelper.getServer() != null) {
             _controlSlideHelper.getServer().setOnServerListener(null);
         }
         super.onDestroy();
@@ -85,15 +85,45 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         _serverListView.setAdapter(_arrayAdapter);
         _serverListView.setOnItemClickListener(this);
 
-        if (_controlSlideHelper.getServer() != null)
-        {
+        if (_controlSlideHelper.getServer() != null) {
             _controlArea.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
-    public void onServerNewFound(IServer iServer) {
+    public void onServerNewFound(IServer server) {
+        server.setOnServerListener(new OnServerListener() {
+            @Override
+            public void onStateChanged(final IServer server) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        _arrayAdapter.notifyDataSetChanged();
 
+                        int checkedItemPosition = _serverListView.getCheckedItemPosition();
+
+                        if (checkedItemPosition < 0) {
+                            return;
+                        }
+
+                        if (server.getState() == ServerState.PasscodeRequested) {
+                                _dialog.show();
+                            //sendPasscode();
+                        }
+
+                        if (server.getState() == ServerState.Connected) {
+                            _controlSlideHelper.setServer(server);
+                            _controlArea.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onDataReceived(IServer server, String data) {
+
+            }
+        });
     }
 
     @Override
@@ -136,7 +166,7 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
 
         if (checkedItemPosition == position) {
             IServer checkedServer = _arrayAdapter.getItem(checkedItemPosition);
-            if(checkedServer.getState() == ServerState.Connected){
+            if (checkedServer.getState() == ServerState.Connected) {
                 return;
             }
         } else {
@@ -151,38 +181,6 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         IServer server = _arrayAdapter.getItem(position);
 
         if (server.getState() == ServerState.None) {
-            server.setOnServerListener(new OnServerListener() {
-                @Override
-                public void onStateChanged(final IServer server) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            _arrayAdapter.notifyDataSetChanged();
-
-                            int checkedItemPosition = _serverListView.getCheckedItemPosition();
-
-                            if (checkedItemPosition < 0) {
-                                return;
-                            }
-
-                            if (server.getState() == ServerState.PasscodeRequested) {
-                                _dialog.show();
-                            }
-
-                            if (server.getState() == ServerState.Connected) {
-                                _controlSlideHelper.setServer(server);
-                                _controlArea.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onDataReceived(IServer server, String data) {
-
-                }
-            });
-
             _comInLanClient.connect(server);
         }
     }
@@ -220,9 +218,9 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
             CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
             if (checkedServer != null) {
                 _comInLanClient.sendPasscode(checkedServer, _passcodeSlideET.getText().toString());
+//                _comInLanClient.sendPasscode(checkedServer, "");
             }
-        }
-        catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return;
         }
     }
@@ -237,8 +235,7 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
             if (checkedServer != null) {
                 _comInLanClient.disconnect(checkedServer);
             }
-        }
-        catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             return;
         }
     }
