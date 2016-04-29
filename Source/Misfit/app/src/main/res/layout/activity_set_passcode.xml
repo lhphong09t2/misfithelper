@@ -17,13 +17,13 @@
         android:gravity="center"/>
 
     <EditText
-        android:id="@+id/confirmPasscodeET"
+        android:id="@+id/passcodeET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:layout_below="@+id/confirmTV"
         android:textColor="@color/textColor"
-        android:inputType="number"
+        android:inputType="numberPassword"
         android:maxLength="4"
         android:gravity="center"/>
 
@@ -32,11 +32,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
         <Button
+            android:id="@+id/cancelEnterPasscode"
             android:layout_width="0dp"
             android:layout_height="@dimen/button_height"
             android:layout_weight="1"
-            android:text=" "/>
-
+            android:text="Cancel"
+            android:onClick="cancel"/>
+        <Button
+            android:id="@+id/okEnterPasscode"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:text="Ok"
+            android:onClick="enterPasscode"/>
     </LinearLayout>
 
 </RelativeLayout>

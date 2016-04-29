@@ -14,6 +14,7 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     private  IServer _iServer;
     private ComInLanClient _comInLanClient;
+    private static boolean _isF5 = true;
 
     public IServer getServer() {
         return _iServer;
@@ -25,6 +26,14 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     public ComInLanClient getComInLanClient() {
         return _comInLanClient;
+    }
+
+    public boolean isF5() {
+        return _isF5;
+    }
+
+    public void setF5(boolean isF5) {
+        this._isF5 = isF5;
     }
 
     public ControlSlideHelper(Context context) {
@@ -85,7 +94,13 @@ public class ControlSlideHelper extends BaseMisfitHelper {
 
     @Override
     public void onTripplePress() {
-        sendData("f");
+        _isF5 = !_isF5;
+        if(_isF5) {
+            sendData("f");
+        }
+        else {
+            sendData("e");
+        }
     }
 
     @Override

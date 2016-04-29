@@ -74,7 +74,8 @@
         <activity
             android:name=".LockConfirmPinActivity"
             android:noHistory="true" />
-        <activity android:name=".SetPasscodeLockActivity"></activity>
+        <activity android:name=".SetPasscodeLockActivity"
+            android:windowSoftInputMode="adjustResize" ></activity>
     </application>
 
 </manifest>

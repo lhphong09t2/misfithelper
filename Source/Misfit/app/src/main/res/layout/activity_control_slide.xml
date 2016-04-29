@@ -7,38 +7,62 @@
     android:background="@color/colorPrimaryDark"
     tools:context="com.example.luongt.misfit.ControlSlideActivity">
 
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="Choose device to connect"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/medium_text"/>
+
     <ListView
         android:id="@+id/serverListView"
         android:choiceMode="singleChoice"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_above="@+id/controlArea">
+        android:layout_above="@+id/controlArea"
+        android:layout_below="@+id/tv">
     </ListView>
+
+    <TextView
+        android:id="@+id/noDeviceTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No device"
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/medium_text"
+        android:gravity="center"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/controlArea"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:padding="@dimen/activity_margin"
         android:layout_alignParentBottom="true"
         android:visibility="gone">
-        <Button
+        <ImageButton
             android:id="@+id/backSlideButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Back"/>
-        <Button
+            android:src="@drawable/previous_slide"
+            android:background="@android:color/transparent"/>
+        <ImageButton
             android:id="@+id/refreshSlideButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Slide show"/>
-        <Button
+            android:src="@drawable/slideshow"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"/>
+        <ImageButton
             android:id="@+id/nextSlideButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Next"/>
+            android:src="@drawable/next_slide"
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
 </RelativeLayout>

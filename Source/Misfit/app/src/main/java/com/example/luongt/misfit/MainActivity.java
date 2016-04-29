@@ -36,16 +36,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initView();
-
-        //TODO:delete this line
-//       new MoneyPaymentHelper(this).recreateTable();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         _enableButton.setChecked(MFLSession.sharedInstance().isEnabled());
     }
 
@@ -54,12 +49,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final Animation inAnimation = AnimationUtils.loadAnimation(this, R.anim.dynamic_scale_in);
         inAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
                 if (v == _enableButton) {
                     if (_enableButton.isChecked()) {
                         MFLSession.sharedInstance().enable("100", "6hbIEM2QbKtOasV4E7b3BvSc6fpId4Cj", new MFLCallBack() {
@@ -78,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                     } else {
-                        MFLSession.sharedInstance().disable();
+                        if(MFLSession.sharedInstance() != null) {
+                            MFLSession.sharedInstance().disable();
+                        }
                     }
                 } else if (v instanceof MisfitHelperControl) {
                     final MisfitHelperControl MFControl = (MisfitHelperControl) v;
@@ -107,15 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     startActivity(new Intent(MainActivity.this, ControlSlideActivity.class));
                                     break;
                             }
-
                         }
                     }.start();
                 }
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) {}
 
         });
 
@@ -123,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.linearLayout1);
-        LinearLayout linearLayout2 = (LinearLayout) findViewById(R.id.linearLayout2);
+        LinearLayout linearLayout1 = (LinearLayout) findViewById(R.id.leftLayout);
+        LinearLayout linearLayout2 = (LinearLayout) findViewById(R.id.rightLayout);
 
         _enableButton = new EnableButton(this, MFLSession.sharedInstance().isEnabled());
         _enableButton.setOnClickListener(this);

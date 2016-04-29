@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -34,9 +35,9 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
     private EditText _passcodeSlideET;
 
     private LinearLayout _controlArea;
-    private Button _backSlideButton;
-    private Button _refreshSlideButton;
-    private Button _nextSlideButton;
+    private ImageButton _backSlideButton;
+    private ImageButton _refreshSlideButton;
+    private ImageButton _nextSlideButton;
 
     private ComInLanClient _comInLanClient;
 
@@ -73,11 +74,11 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         _passcodeSlideET = (EditText) _dialog.findViewById(R.id.passcodeSlideET);
 
         _controlArea = (LinearLayout) findViewById(R.id.controlArea);
-        _backSlideButton = (Button) findViewById(R.id.backSlideButton);
+        _backSlideButton = (ImageButton) findViewById(R.id.backSlideButton);
         _backSlideButton.setOnClickListener(this);
-        _refreshSlideButton = (Button) findViewById(R.id.refreshSlideButton);
+        _refreshSlideButton = (ImageButton) findViewById(R.id.refreshSlideButton);
         _refreshSlideButton.setOnClickListener(this);
-        _nextSlideButton = (Button) findViewById(R.id.nextSlideButton);
+        _nextSlideButton = (ImageButton) findViewById(R.id.nextSlideButton);
         _nextSlideButton.setOnClickListener(this);
 
         _serverListView = (ListView) findViewById(R.id.serverListView);
@@ -107,8 +108,7 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
                         }
 
                         if (server.getState() == ServerState.PasscodeRequested) {
-                                _dialog.show();
-                            //sendPasscode();
+                            _dialog.show();
                         }
 
                         if (server.getState() == ServerState.Connected) {
@@ -180,7 +180,7 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
         _serverListView.setItemChecked(position, true);
         IServer server = _arrayAdapter.getItem(position);
 
-        if (server.getState() == ServerState.None) {
+        if (server.getState() != ServerState.Connected) {
             _comInLanClient.connect(server);
         }
     }
@@ -202,7 +202,15 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
             _controlSlideHelper.sendData("b");
         }
         if (v == _refreshSlideButton) {
-            _controlSlideHelper.sendData("f");
+            _controlSlideHelper.setF5(!_controlSlideHelper.isF5());
+            if(_controlSlideHelper.isF5()) {
+                _controlSlideHelper.sendData("f");
+                _refreshSlideButton.setImageResource(R.drawable.exit_slideshow);
+            }
+            else {
+                _controlSlideHelper.sendData("e");
+                _refreshSlideButton.setImageResource(R.drawable.slideshow);
+            }
         }
         if (v == _nextSlideButton) {
             _controlSlideHelper.sendData("n");
@@ -218,7 +226,6 @@ public class ControlSlideActivity extends AppCompatActivity implements OnBroadca
             CServer checkedServer = (CServer) _serverListView.getItemAtPosition(checkedItemPosition);
             if (checkedServer != null) {
                 _comInLanClient.sendPasscode(checkedServer, _passcodeSlideET.getText().toString());
-//                _comInLanClient.sendPasscode(checkedServer, "");
             }
         } catch (IndexOutOfBoundsException e) {
             return;
