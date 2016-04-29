@@ -16,7 +16,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.luongt.misfit.control.PassCode;
+import com.example.luongt.misfit.misfithelper.LockHelper;
+import com.example.luongt.misfit.model.setting.LockSetting;
 import com.example.luongt.misfit.receiver.LockReceiver;
+import com.example.luongt.misfit.service.HelloService;
 
 public class LockActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -30,6 +33,8 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     private TextView _passcodeEditText;
 
     private WindowManager _manager;
+
+    private LockHelper _lockHelper;
 
     private LocalBroadcastManager _localBroadcastManager;
     private BroadcastReceiver _broadcastReceiver = new BroadcastReceiver() {
@@ -55,6 +60,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         setFullScreen();
 
         _instance = this;
+        _lockHelper = HelloService.getInstance().getLockHelper();
 
         _manager = ((WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE));
 
@@ -136,7 +142,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onOKClick(View v) {
-        if(_passcodeEditText.getText().toString().equals(MFContants.PIN_UNLOCK)){
+        if(_passcodeEditText.getText().toString().equals(((LockSetting)_lockHelper.getSetting()).getPasscode())){
             Unlock();
         }
         else{

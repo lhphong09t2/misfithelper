@@ -70,19 +70,13 @@ public class LockHelper extends BaseMisfitHelper {
     }
 
     @Override
-    public void onSinglePress() {
-
-    }
+    public void onSinglePress() {}
 
     @Override
-    public void onDoublePress() {
-
-    }
+    public void onDoublePress() {}
 
     @Override
-    public void onTripplePress() {
-
-    }
+    public void onTripplePress() {}
 
 }
 
